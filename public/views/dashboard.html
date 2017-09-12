@@ -1,0 +1,13 @@
+<div id="appContainer">
+	<header style="background-color:#ECEBD6; margin-top:0; padding-left: 10px; padding-right: 10px;">
+		<h1 style="margin-top: 0">Dashboard</h1>
+	<header>
+	<div id="main">
+		<table ng-repeat="reservation in reservations">
+			<tr>
+				<td>{{ reservation.resNum }}</td>
+				<td>{{ reservation.resName }}</td>
+			</tr>
+		<table>
+	</div>
+</div>
