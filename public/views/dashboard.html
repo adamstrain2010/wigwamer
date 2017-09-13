@@ -10,13 +10,15 @@
 				<th>Arrival Date</th>
 				<th>Departure Date</th>
 				<th>Booking Source</th>
+				<th>Details</th>
 			</tr>
 			<tr ng-repeat="reservation in reservations">
 				<td>{{ reservation.reservationId }}</td>
 				<td>{{ reservation.reservationName }}</td>
-				<td>{{ moment(reservation.arrivalDate).format("DD/MM/YYYY") }}</td>
+				<td>{{ reservation.arrivalDate }}</td>
 				<td>{{ reservation.departureDate }}</td>
 				<td>{{ reservation.bookingSource }}</td>
+				<td><button class="info" ng-click="printInfo(this.reservation.reservationId)">i</button></td>
 			</tr>
 		<table>
 	</div>

@@ -1,4 +1,24 @@
 var app = angular.module('MainCtrl', []);
+app.factory("TestService",function($http){
+	return {
+		async : function(arrivalDate){
+			var apiUrl = 'http://52.19.183.139:1234/api/reservations?arrivalDate=' + arrivalDate;
+                	console.log("apiUrl: " + apiUrl);
+                	return $http.post(apiUrl);
+		}
+	};
+});
+
+app.factory("getInfo", function($http){
+	 return {
+                printData: function(el){
+                        console.log(el);
+                        //return "adam";
+                }
+        };
+
+});
+
 app.controller('LoginController', function($scope, $http) {
 	$("body").css("backgroundColor","#ECEBD6");
 	$scope.tagline = 'WIGWAMER LOGIN!';	
@@ -6,7 +26,7 @@ app.controller('LoginController', function($scope, $http) {
 	$scope.property = '';
 	$scope.user = '';
 	$scope.password = '';
-
+	
 	$scope.validateUser = function(){
 		if($scope.checkFilled([$scope.property, $scope.user, $scope.password])){
 			var apiUrl = 'http://52.19.183.139:1234/api/checkUser?username=' + $scope.user + '&organisation=' + $scope.property + '&password=' + $scope.password;
@@ -64,21 +84,32 @@ app.controller('LoginController', function($scope, $http) {
 	})
 });
 
-app.controller('DashboardController',function($scope,$http){
-	console.log(moment().format('MMMM Do YYYY'));
-	$scope.arrivalDate = "2017-11-01";
-	concatUrl = "http://52.19.183.139:1234/api/reservations?arrivalDate=" + $scope.arrivalDate;
- 	console.log(concatUrl);
+app.controller('DashboardController',function($scope,$http, TestService, getInfo){
+	$scope.printInfo = getInfo.printData;
+
+	var reservations;
 	$scope.reservations;
-	$http({
-		method: "POST",
-		url: concatUrl
-	}).then(function(response){
+	$scope.arrivalDate = "2017-11-01";
+	$scope.reservation 
+	TestService.async($scope.arrivalDate).then(function(response){
 		$scope.reservations = response.data.recordset;
-		console.log(data);
-	}, function(err){
-		console.log("Error: " + err.data + "\n Please contact support if issue persists");
+		$scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
 	});
+	
+	//console.log(moment().format('MMMM Do YYYY'));
+	//$scope.arrivalDate = "2017-11-01";
+	//concatUrl = "http://52.19.183.139:1234/api/reservations?arrivalDate=" + $scope.arrivalDate;
+ 	//console.log(concatUrl);
+	//$scope.reservations;
+	//$http({
+	//	method: "POST",
+	//	url: concatUrl
+	//}).then(function(response){
+	//	$scope.reservations = response.data.recordset;
+	//	console.log(data);
+	//}, function(err){
+	//	console.log("Error: " + err.data + "\n Please contact support if issue persists");
+//	});
 	
 	//console.log("Yes!");
 	//$scope.data = [{"resNum":"001", "resName": "Adam Strain", "arrivalDate": "30/06/2018"},{"resNum":"002", "resName": "Roger Dodger","arrivalDate": "30/06/2018"}];
