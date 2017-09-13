@@ -1,4 +1,5 @@
-angular.module('MainCtrl', []).controller('LoginController', function($scope, $http) {
+var app = angular.module('MainCtrl', []);
+app.controller('LoginController', function($scope, $http) {
 	$("body").css("backgroundColor","#ECEBD6");
 	$scope.tagline = 'WIGWAMER LOGIN!';	
 	
@@ -61,4 +62,24 @@ angular.module('MainCtrl', []).controller('LoginController', function($scope, $h
 	$('#messageContainer').click(function(){
 		$(this).css("opacity",0);
 	})
+});
+
+app.controller('DashboardController',function($scope,$http){
+	console.log(moment().format('MMMM Do YYYY'));
+	$scope.arrivalDate = "2017-11-01";
+	concatUrl = "http://52.19.183.139:1234/api/reservations?arrivalDate=" + $scope.arrivalDate;
+ 	console.log(concatUrl);
+	$scope.reservations;
+	$http({
+		method: "POST",
+		url: concatUrl
+	}).then(function(response){
+		$scope.reservations = response.data.recordset;
+		console.log(data);
+	}, function(err){
+		console.log("Error: " + err.data + "\n Please contact support if issue persists");
+	});
+	
+	//console.log("Yes!");
+	//$scope.data = [{"resNum":"001", "resName": "Adam Strain", "arrivalDate": "30/06/2018"},{"resNum":"002", "resName": "Roger Dodger","arrivalDate": "30/06/2018"}];
 });

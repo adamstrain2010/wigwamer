@@ -5,6 +5,7 @@
     "body-parser": "~1.4.2",
     "express": "~4.5.1",
     "method-override": "~2.0.2",
+    "moment": "^2.18.1",
     "mongoose": "~3.8.0",
     "mssql": "^4.0.4"
   }

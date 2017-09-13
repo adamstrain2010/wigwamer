@@ -10,13 +10,13 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		})
 
 		.when('/dashboard', {
-			templateUrl: 'views/dashboard.html'
-			//controller: 'DashboardController'
+			templateUrl: 'views/dashboard.html',
+			controller: 'DashboardController'
 		})
 
-		.when('/geeks', {
-			templateUrl: 'views/geek.html',
-			controller: 'GeekController'	
+		.when('/planner', {
+			templateUrl: 'views/planner.html',
+			controller: 'PlannerController'	
 		})
 		
 		.otherwise({
