@@ -5,9 +5,10 @@
 	<base href="/">
 
 	<title>Starter Node and Angular</title>
-
+	<!--STATIC CSS-->
+	<link href="css/theme.css" type="text/css" rel="stylesheet" />
 	<!-- CSS -->
-	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/style.css"> 
 	<!-- custom styles -->
 	<link href="https://fonts.googleapis.com/css?family=Grand+Hotel" rel="stylesheet">
@@ -32,6 +33,10 @@
 </head>
 <body ng-app="sampleApp" ng-controller="NerdController">
 <div class="container">
+	<div class="row">
+		<div class="col-md-12" ng-include="'views/partials/nav.html'" ng-if="location.path() !== '/'">
+		</div>
+	</div>
 	<!-- ANGULAR DYNAMIC CONTENT -->
 	<div ng-view></div>
 </div>

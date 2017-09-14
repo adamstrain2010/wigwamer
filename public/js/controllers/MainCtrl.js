@@ -19,7 +19,8 @@ app.factory("getInfo", function($http){
 
 });
 
-app.controller('LoginController', function($scope, $http) {
+app.controller('LoginController', function($scope,$rootScope,$location, $http) {
+	$rootScope.location =  $location;
 	$("body").css("backgroundColor","#ECEBD6");
 	$scope.tagline = 'WIGWAMER LOGIN!';	
 	

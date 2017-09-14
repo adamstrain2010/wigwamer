@@ -1,0 +1,9 @@
+.dropdown:hover .dropdown-menu{
+	display: block;
+}
+
+input.beautified{
+	padding: 3px 9px !important;
+	background-color: white;
+	border-radius: 5px !important;
+}
