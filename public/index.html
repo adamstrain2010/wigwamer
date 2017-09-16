@@ -39,11 +39,32 @@
 <body ng-app="sampleApp" ng-controller="NerdController">
 <div class="container">
 	<div class="row">
-		<div class="col-md-12" ng-include="'views/partials/nav.html'" ng-if="location.path() !== '/'">
+		<div class="col-md-12" id="headerNoPad" ng-include="'views/partials/nav.html'" ng-if="location.path() !== '/'">
 		</div>
+		<header style="margin-top:0; padding-left: 10px; padding-right: 10px;">
+		<div class="row">
+			<div class="sidePadded" ng-if="location.path() !== '/'">
+				<div class="col-md-6">
+					<h1 style="margin-top: 0" class="fadedOrange">{{ pageTitle }}<span class="fadedBlack">{{subtitle}}</span></h1>
+				</div>
+				<div class="col-md-6 center">
+					<div id="contextBox">
+						<div class="row" id="innerContext">
+							<div class="col-md-3" ng-repeat="option in contextMenuOptions">
+								<a class="contextLink" href="{{option.href}}">{{option.title}}</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	<header>
 	</div>
 	<!-- ANGULAR DYNAMIC CONTENT -->
-	<div ng-view></div>
+	<div id="appContainer" class="sidePadded">
+		<div id="main">
+			<div ng-view></div>
+		</div>
+	</div>
 </div>
 </body>
 </html>

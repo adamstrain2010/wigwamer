@@ -9,9 +9,19 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			css: 'css/login.css'
 		})
 
-		.when('/dashboard', {
-			templateUrl: 'views/dashboard.html',
-			controller: 'DashboardController'
+		.when('/dashboard/arrivals', {
+			templateUrl: 'views/dashboard/arrivals.html',
+			controller: 'DashboardArrivalsController'
+		})
+		
+		.when('/dashboard/departures', {
+			templateUrl: 'views/dashboard/departures.html',
+			controller: 'DashboardDeparturesController'
+		})
+		
+		.when('/dashboard/inHouse', {
+			templateUrl: 'views/dashboard/inHouse.html',
+			controller: 'DashboardInHouseController'
 		})
 
 		.when('/planner', {

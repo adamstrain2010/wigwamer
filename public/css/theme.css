@@ -65,3 +65,57 @@ modal-dialog{
 .modalInput{
 	text-align: center;
 }
+
+.sidePadded{
+	width: 95%;
+	margin: 0 auto;
+}
+
+#headerNoPad{
+	padding: 0;
+}
+
+#contextBox{
+	background-color: orange;
+	padding: 10px 10px;
+	margin: 0 auto;
+	border-radius: 5px;
+}
+
+#innerContext{
+	overflow-y: hidden;
+	white-space: nowrap;
+	text-align: center;
+	color: white;
+}
+
+.contextLink{
+	color: white;
+	text-transform: uppercase;
+}
+
+#myModalLabel{
+	padding: 0 15px;
+}
+
+#modalHeaderButtons{
+	padding: 10px 0;
+	background-color: white;
+}
+
+.modalButton{
+	background-color: #FF9800;
+	color: white;
+}
+
+.padBottom15{
+	padding-bottom: 15px;
+}
+
+.choiceButtons{
+	width: 100px;
+}
+
+.modalFullHeight{
+	height: 90%;
+}
