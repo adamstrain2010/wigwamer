@@ -3,19 +3,27 @@ app.factory("TestService",function($http){
 	return {
 		async : function(arrivalDate){
 			var apiUrl = 'http://52.19.183.139:1234/api/reservations?arrivalDate=' + arrivalDate;
-                	console.log("apiUrl: " + apiUrl);
                 	return $http.post(apiUrl);
 		}
 	};
 });
 
-app.factory("getInfo", function($http){
+app.factory("getReservation", function($http){
 	 return {
-                printData: function(el){
-                        console.log(el);
-                        //return "adam";
-                }
-        };
+                showData: function(reservationId){
+			
+                        var apiUrl = 'http://52.19.183.139:1234/api/getReservation?reservationId=' + reservationId;
+			console.log(reservationId);
+			return $http({
+				method: 'POST',
+				url: apiUrl,
+				cache: true
+			})
+			.then(function(data){
+				return data.data
+			})
+		}
+        }
 
 });
 
@@ -36,9 +44,15 @@ app.controller('LoginController', function($scope,$rootScope,$location, $http) {
         	                url: apiUrl
         	        })
 	                .then(function successCallback(response){
+				console.log(response);
                 	      	login(response.data.recordset.length);
                		 }, function errorCallback(err){
-				$scope.showMessage("error",err.data + "\n Please contact support if problem persists");
+				if(err.data == null){
+					$scope.showMessage("error", "The wigwamer API is currently down. Please contact support.");
+				}
+				else{
+					$scope.showMessage("error",err.data + "\n Please contact support if problem persists");
+				}
                 	});
 
 		}
@@ -85,33 +99,47 @@ app.controller('LoginController', function($scope,$rootScope,$location, $http) {
 	})
 });
 
-app.controller('DashboardController',function($scope,$http, TestService, getInfo){
-	$scope.printInfo = getInfo.printData;
+app.controller('DashboardController',function($scope,$http,$rootScope, TestService, getReservation){
+	$rootScope.$on('$viewContentLoaded',function(){
+		$("#arrivalDate").datepicker({
+			format: "DD-MM-YYYY",
+			inline: true,
+			sideBySide: false,
+			minDate: moment()
+		})
+	})
 
-	var reservations;
+
+
+	$scope.sortType = "reservationId";
+	$scope.sortReverse = false;
+
+	$scope.printInfo = getReservation.showData;
+	
+	$scope.reservation = {reservationNum: -1, surname:"surname", forename:"forename", reservationName: "surname,forename",arrivalDate: moment("1900-01-01"), departureDate: moment("1900-01-01"),bookingSource:-1};
 	$scope.reservations;
 	$scope.arrivalDate = "2017-11-01";
-	$scope.reservation 
+	$scope.selecredReservation;
 	TestService.async($scope.arrivalDate).then(function(response){
 		$scope.reservations = response.data.recordset;
 		$scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
 	});
-	
-	//console.log(moment().format('MMMM Do YYYY'));
-	//$scope.arrivalDate = "2017-11-01";
-	//concatUrl = "http://52.19.183.139:1234/api/reservations?arrivalDate=" + $scope.arrivalDate;
- 	//console.log(concatUrl);
-	//$scope.reservations;
-	//$http({
-	//	method: "POST",
-	//	url: concatUrl
-	//}).then(function(response){
-	//	$scope.reservations = response.data.recordset;
-	//	console.log(data);
-	//}, function(err){
-	//	console.log("Error: " + err.data + "\n Please contact support if issue persists");
-//	});
-	
-	//console.log("Yes!");
-	//$scope.data = [{"resNum":"001", "resName": "Adam Strain", "arrivalDate": "30/06/2018"},{"resNum":"002", "resName": "Roger Dodger","arrivalDate": "30/06/2018"}];
+
+	$scope.setCurrentReservation = function(reservationNum){
+		console.log(reservationNum.reservation.reservationId);
+		getReservation.showData(reservationNum.reservation.reservationId)
+		.then(function(res){
+			$scope.selectedReservation = res.recordset[0]; 
+			console.log($scope.selectedReservation);
+		})
+		.catch(function(err){
+			console.log(err);
+		})
+	};
+});
+
+app.controller("PlannerController", function($scope, $http){
+	$(".nav").find(".active").removeClass("active");
+        $("#plannerLink").addClass("active");	
+   	console.log("adam");
 });

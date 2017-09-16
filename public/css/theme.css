@@ -7,3 +7,61 @@ input.beautified{
 	background-color: white;
 	border-radius: 5px !important;
 }
+
+.fadedOrange{
+	color:rgba(255, 152, 0,0.6);
+}
+
+.fadedBlack{
+	color:rgba(0,0,0,0.4);
+}
+
+.fullPageTable{
+	width: 95%;
+	margin: 0 auto;
+	table-layout: fixed;
+}
+
+table{
+	table-layout: fixed;
+}
+
+tbody>tr>td, tbody>tr>th{
+	text-align: center;
+	vertical-align: middle !important;	
+}
+
+.full>tbody>tr>th{
+	background-color:#FF9800;
+	color: white;
+}
+
+.full>tbody>tr>th>a{
+       	color:white;
+}
+
+tbody>tr>th>a:hover, tbody>tr>th>a:focus {
+        text-decoration: none;
+	color:#ff9800;	
+}
+
+.noFingerLink{
+	cursor: default;
+}
+
+modal-dialog{
+	width: 80%;
+}
+
+.modal-header-primary{
+	background-color: #FF9800;
+	color: white;
+}
+
+.white{
+	color: white;
+}
+
+.modalInput{
+	text-align: center;
+}
