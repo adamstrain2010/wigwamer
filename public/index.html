@@ -37,7 +37,7 @@
 	<script src="js/behaviour.js"></script>
 </head>
 <body ng-app="sampleApp" ng-controller="NerdController">
-<div class="container">
+<div class="container" ng-cloak>
 	<div class="row">
 		<div class="col-md-12" id="headerNoPad" ng-include="'views/partials/nav.html'" ng-if="location.path() !== '/'">
 		</div>
@@ -45,7 +45,7 @@
 		<div class="row">
 			<div class="sidePadded" ng-if="location.path() !== '/'">
 				<div class="col-md-6">
-					<h1 style="margin-top: 0" class="fadedOrange">{{ pageTitle }}<span class="fadedBlack">{{subtitle}}</span></h1>
+					<h3 style="margin-top: 0" class="fadedOrange">{{ pageTitle }}<span class="fadedBlack">{{subtitle}}</span></h3>
 				</div>
 				<div class="col-md-6 center">
 					<div id="contextBox">

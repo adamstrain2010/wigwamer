@@ -5,19 +5,25 @@
 				<th><a class="noFingerLink" href="#" ng-click="sortType = 'arrivalDate'; sortReverse = !sortReverse;">Arrival Date<span ng-show="sortType == 'arrivalDate' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'arrivalDate' &&sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 				<th><a class="noFingerLink" href="#" ng-click="sortType = 'departureDate'; sortReverse = !sortReverse;">Departure Date<span ng-show="sortType == 'departureDate' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'departureDate' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 				<th><a class="noFingerLink" href="#" ng-click="sortType = 'bookingSource'; sortReverse = !sortReverse;">Booking Source<span ng-show="sortType == 'bookingSource' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'bookingSource' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
-				<th>Details</th>
+				<th><a href="#" class="noFingerLink">Details</a></th>
 			</tr>
 			<tr ng-repeat="reservation in reservations | orderBy:sortType:sortReverse">
 				<td>{{ reservation.reservationId }}</td>
 				<td>{{ reservation.reservationName }}</td>
 				<td>{{ reservation.arrivalDate }}</td>
 				<td>{{ reservation.departureDate }}</td>
-				<td>{{ reservation.bookingSource }}</td>
+				<td><span style="background-color: {{reservation.bookingSourceColour}}; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold">{{ reservation.bookingSourceAbbreviation }}</span></td>
 				<td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal"><i class="fa fa-address-book-o" aria-hidden="true"></i></button></td>
 			</tr>
 		<table>
-	
+	<button ng-click="createReservation()">Test-Create New Reservation</button>
 <!-- Modal -->
+	
+	
+
+<!--</div>-->
+	
+	<!--Reservation Modal-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg modalFullHeight" role="document">
     <div class="modal-content">
@@ -29,57 +35,104 @@
 			</div>
 		</div>
 		<div class="row" id="modalHeaderButtons" style="text-align: center">
-			<div class="col-md-3">
-				<button class="btn modalButton">Reservation</button>
+			<div class="col-md-2">
+				<button class="btn modalButton" ng-click="setModal('reservation')">Reservation</button>
 			</div>
-			<div class="col-md-3">
-				<button class="btn modalButton">Posting</button>
+			<div class="col-md-2">
+				<button class="btn modalButton" ng-click="setModal('breakdown')">Breakdown</button>
 			</div>
-			<div class="col-md-3">
-				<button class="btn modalButton">History</button>
+			<div class="col-md-2">
+				<button class="btn modalButton" ng-click="setModal('posting')">Posting</button>
 			</div>
-			<div class="col-md-3">
-				<button class="btn modalButton">Check In</button>
+			<div class="col-md-2">
+				<button class="btn modalButton" ng-click="setModal('history')">History</button>
 			</div>
+			<div class="col-md-2">
+				<button class="btn modalButton"  ng-click="checkIn(this.selectedReservation.reservationId)" data-dismiss="modal">Check In</button>
+			</div>
+			<div class="col-md-2 dropdown">
+				<button class="btn modalButton dropdown-toggle" type="button" data-toggle="dropdown">More..
+				<span class="caret"></span></button>
+				<ul class="dropdown-menu">
+				  <li><a href ng-click="cancel(this.selectedReservation.reservationId)" data-dismiss="modal">Cancel..</a></li>
+				  <li><a href="#">Notes..</a></li>
+				  <li><a href="#">Events..</a></li>
+				</ul>
+			  </div>
 		</div>
       </div>
-      <div class="modal-body">
-		<div class="row">
+      <div class="modal-body" ng-switch="modalContextOpen">
+		<div class="row" ng-switch-when="reservation">
 	  		<div class="col-md-12">	
-			<div class="row">
-				<form name="resForm">
-					<div class="col-md-3">
-						<div class="form-group">
-							<label>Reservation Num:</label>
-							<input type="text" ng-model="selectedReservation.reservationId" name="resId" class="modalInput form-control">
-						</div> 
-						<div class="form-group">	
-							<label>Surname:</label>
-							<input type="text" ng-model="selectedReservation.surname" name="surname"  class="modalInput form-control">
+				<div class="row">
+					<form name="resForm">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Reservation Num:</label>
+								<input type="text" ng-model="selectedReservation.reservationId" name="resId" disabled class="modalInput form-control">
+							</div> 
+							<div class="form-group">	
+								<label>Surname:</label>
+								<input type="text" ng-model="selectedReservation.surname" name="surname"  class="modalInput form-control">
+							</div>
+							<div class="form-group">
+								<label>Forename</label>	
+								<input type="text" ng-model="selectedReservation.forename" name="forename" class="modalInput form-control">
+							</div>
 						</div>
-						<div class="form-group">
-							<label>Forename</label>	
-							<input type="text" ng-model="selectedReservation.forename" name="forename" class="modalInput form-control">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Arriving:</label>
+								<input type="date" class="form-control" value="{{ selectedReservation.arrivalDate }}" >
+									</div>
+							<div class="form-group">
+								<label>Departing:</label>
+								<input type="date" class="form-control" value="{{ selectedReservation.departureDate }}" >	
+							</div>
 						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="form-group">
-							<label>Arriving:</label>
-							<input type="date" class="form-control" value="{{ selectedReservation.arrivalDate }}" >
-            					</div>
-						<div class="form-group">
-							<label>Departing:</label>
-							<input type="date" class="form-control" value="{{ selectedReservation.departureDate }}" >	
-						</div>
-	      				</div>
-      				</form>
+					</form>
+				</div>
 			</div>
 		</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary choiceButtons" ng-click="saveReservation()">Save</button>
-        <button type="button" class="btn btn-danger choiceButtons" data-dismiss="modal">Cancel</button>
-      </div>
+		
+		
+		<div class="row" ng-switch-when="posting">
+	  		<div class="col-md-12">	
+				<div class="row">
+					<span>posting</span>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default choiceButtons" ng-click="saveReservation()">Save</button>
+			<button type="button" class="btn btn-default btnNegative choiceButtons" data-dismiss="modal">Cancel</button>
+		</div>
     </div>
+	
+<!--MESSAGE MODAL-->
+<div class="modal fade" id="myMessageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<div class="row">
+					<div class="col-md-12 padBottom15">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="white" aria-hidden="true">&times;</span></button>
+						<h5 class="modal-title white" id="myModalLabel">{{ message.title }}</h4>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{{ message.body }}
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btnNegative choiceButtons" data-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+	
 
 

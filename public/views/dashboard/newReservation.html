@@ -1,0 +1,36 @@
+<div class="row">
+	<div class="col-md-2">
+		<form>
+			<div class="form-group">
+				<label>Surname</label>
+				<input type="text" class="form-control" ng-model="surname">
+			</div>
+			<div class="form-group">
+				<label>Forename</label>
+				<input type="text" class="form-control" ng-model="forename">
+			</div>
+		</form>
+	</div>
+	<div class="col-md-2">
+		<form>
+			<div class="form-group">
+				<label>Arriving</label>
+				<input type="date" class="form-control" ng-model="arrivalDate">
+			</div>
+			<div class="form-group">
+				<label>Departing</label>
+				<input type="date" class="form-control" ng-model="departDate">
+			</div>
+		</form>
+	</div>
+</div>	
+<div class="row">
+	<div class="col-md-10">
+	</div>
+	<div class="col-md-1">
+		<button class="btn btn-default choiceButtons">Save</button>
+	</div>
+	<div class="col-md-1">
+		<button class="btn btn-default btnNegative choiceButtons" ng-click="clearForm()">Clear</button>
+	</div>
+</div>

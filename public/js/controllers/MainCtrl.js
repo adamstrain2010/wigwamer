@@ -1,4 +1,25 @@
 var app = angular.module('MainCtrl', []);
+app.directive('escKey',function(){
+	return function(scope, element, attrs){
+		element.bind('keydown keypress', function(event){
+			if(event.which === 27){
+				scope.$apply(function(){
+					scope.$eval(attrs.escKey);
+				});
+				event.preventDefault();
+			}
+		})
+	}
+})
+
+app.directive("searchKey", function(){
+	return function(scope,element, attrs){
+		element.bind("keyup", function(){
+			console.log(attrs.$$element[0].value);
+		})
+	};
+});
+
 app.factory("TestService",function($http){
 	return {
 		async : function(arrivalDate){
@@ -21,10 +42,25 @@ app.factory("reservations", function($http){
 		var apiUrl = 'http://52.19.183.139:1234/api/reservationsInHouse';
 		return $http.post(apiUrl);
 	};
+	var checkInIndividual = function(reservationNum){
+		var apiUrl = 'http://52.19.183.139:1234/api/checkIn?reservationNum=' + reservationNum;
+		return $http.post(apiUrl);
+	};
+	var searchReservations = function(searchString){
+		var apiUrl = 'http://52.19.183.139:1234/api/search?searchTerm=' + searchString;
+		return $http.get(apiUrl);
+	};
+	var cancel = function(reservationNum){
+		var apiUrl = 'http://52.19.183.139:1234/api/cancelReservation?reservationNum=' + reservationNum;
+		return $http.post(apiUrl);
+	}
 	return{
 		getReservationsDeparting: getReservationsByDepartDate,
 		method2: getReservationByArrivalDate,
-		reservationsInHouse: getReservationsInHouse
+		reservationsInHouse: getReservationsInHouse,
+		checkInSingle: checkInIndividual,
+		doSearch: searchReservations,
+		cancelReservation: cancel
 	}
 });
 
@@ -97,7 +133,9 @@ app.controller('LoginController', function($scope,$rootScope,$location, $http) {
         	                url: apiUrl
         	        })
 	                .then(function successCallback(response){
-				console.log(response);
+							console.log("response comes next")
+							console.log(response.data.recodset);
+							console.log(response.data.recordset.length);
                 	      	login(response.data.recordset.length);
                		 }, function errorCallback(err){
 				if(err.data == null){
@@ -152,7 +190,76 @@ app.controller('LoginController', function($scope,$rootScope,$location, $http) {
 	})
 });
 
-app.controller('DashboardArrivalsController',function($scope,$http,$rootScope, TestService, getReservation, helpers, reservation){
+
+//ARRIVALS CONTROLLER
+app.controller('DashboardArrivalsController',function($scope,$http,$rootScope, TestService, getReservation, helpers, reservation, reservations){
+	$scope.setModal = function(state){
+		$scope.modalContextOpen = state;
+	}
+	$scope.modalContextOpen = "reservation";
+	
+	$scope.checkIn = function(el){
+		reservations.checkInSingle(el)
+		.then(function(data){
+			if(confirm("are you sure you want to do this?") == true){
+				TestService.async($scope.arrivalDate).then(function(response){
+					$scope.reservations = response.data.recordset;
+					$scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
+					$scope.message = {"title": "Checked In", "body": "The reservation was checked in successfully, you can now hand the key to the guest"};
+				})
+				.then(function(){
+					//adam yes
+					alert("Reservation Checked In");
+				})		
+				.catch(function(err){
+					console.log(err);
+				});
+			};
+		})
+	};
+	$scope.filterText = '';
+	$(document).on('hidden.bs.modal',"#myModal",function(){
+		if($scope.checkedIn == true){
+		}
+	});
+	
+	// $(document).on('hidden.bs.modal','#myModal',function(){
+		// $("#myMessageModal").modal("show");
+	// });
+	
+	// $(document).ready(function(){
+		// $("#myMessageModal").modal("show");
+	// });
+	
+	$scope.cancel = function(resNum){
+		reservations.cancelReservation(resNum)
+		.then(function(data){
+			if(confirm("Do you really want to cancel reservation " + resNum + "?") == true){
+				TestService.async($scope.arrivalDate).then(function(response){
+					$scope.reservations = response.data.recordset;
+					$scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
+					$scope.message = {"title": "Cancelling Reservation", "body": "Are you sure you want to cancel this reservation?"};
+				})
+				.then(function(){
+					alert("Reservation Cancelled");
+					//$("#myMessageModal").modal("show");
+				})
+			}
+		})
+		
+	};
+	
+	$scope.closeModal = function(){
+		$(".fullScreenModal").css("display", "none")
+		$("body").css("overflow", "scroll")
+	};
+	
+	$(document).on("click", "#searchClose", function(){
+		$scope.closeModal();
+	});
+	
+	$scope.searchedReservations = [{"name":"adam"},{"name":"roger"},{"name":"david"},{"name":"jim"}];
+	
 	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
 	$rootScope.pageTitle = "DASHBOARD|";
 	$rootScope.subtitle = "arrivals";
@@ -160,12 +267,40 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope, T
 	$scope.sortType = "reservationId";
 	$scope.sortReverse = false;
 
+	$rootScope.searchOpen = false;
+	$rootScope.search = function(){
+		console.log("searching function activated");
+		$("#mainSearchInput").val('');
+		$("body").css("overflow", "hidden")
+		$(".fullScreenModal").css("display","block");
+		$scope.searchOpen = true;
+		$("#mainSearchInput").focus();
+	};
+	
+	$scope.searchedResers;
+	
+	$scope.doSearch = function(searchTerm){
+		if(searchTerm.length >= 3){
+			reservations.doSearch(searchTerm)
+			.then(function(result){
+				console.log(result.data.recordset)
+				$scope.searchedResers = result.data.recordset;
+			})
+		}
+		else{
+			$scope.searchedResers = [];
+		}
+	};
+	
+	$scope.hideModal = function(){
+	};
+	
 	$scope.printInfo = getReservation.showData;
 	
 	$scope.reservation = {reservationNum: -1, surname:"surname", forename:"forename", reservationName: "surname,forename",arrivalDate: moment("1900-01-01"), departureDate: moment("1900-01-01"),bookingSource:-1};
 	$scope.reservations;
 	$scope.arrivalDate = "2017-11-01";
-	$scope.selecredReservation;
+	$scope.selectedReservation;
 	TestService.async($scope.arrivalDate).then(function(response){
 		$scope.reservations = response.data.recordset;
 		$scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
@@ -194,12 +329,28 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope, T
 		})
 		.catch(function(err){
 			console.log(err);
-		})		
-	}
+		});		
+	};
+	
+	$scope.createReservation = function(){
+		console.log("yep");
+		$http.post("http://52.19.183.139:1234/api/createReservation")
+		.then(function(data){
+			TestService.async($scope.arrivalDate).then(function(response){
+				$scope.reservations = response.data.recordset;
+				$scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
+			});
+		});
+	};
+	
+	$scope.message;
+	
+	$scope.checkedIn = false;
+	
 });
 
 
-//here
+//DEPARTURES CONTROLLER
 app.controller('DashboardDeparturesController',function($scope,$http,$rootScope, TestService, getReservation, helpers, reservation, reservations){
 	console.log("yep");
 	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
@@ -213,7 +364,7 @@ app.controller('DashboardDeparturesController',function($scope,$http,$rootScope,
 	
 	$scope.reservation = {reservationNum: -1, surname:"surname", forename:"forename", reservationName: "surname,forename",arrivalDate: moment("1900-01-01"), departureDate: moment("1900-01-01"),bookingSource:-1};
 	$scope.reservations;
-	$scope.departDate = "2017-11-02";
+	$scope.departDate = "2017-11-01";
 	$scope.selecredReservation;
 	reservations.getReservationsDeparting($scope.departDate).then(function(response){
 		$scope.reservations = response.data.recordset;
@@ -246,8 +397,8 @@ app.controller('DashboardDeparturesController',function($scope,$http,$rootScope,
 		})		
 	}
 });
-//to here
 
+//IN HOUSE CONTROLLER
 app.controller('DashboardInHouseController',function($scope,$http,$rootScope, TestService, getReservation, helpers, reservation, reservations){
 	console.log("yep");
 	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
@@ -295,10 +446,37 @@ app.controller('DashboardInHouseController',function($scope,$http,$rootScope, Te
 	}
 });
 
+app.controller("NewReservationController", function($scope,$rootScope, $http){
+	$rootScope.pageTitle = "DASHBOARD|";
+	$rootScope.subtitle = "new reservation";
+	$scope.clearForm = function(){
+		console.log("clearing");
+		$("#newResForm").find(".form-control").val("");
+		$("#newResForm").find(".form-control").valueAsDate = null;
+	}
+});
+
 app.controller("PlannerController", function($scope,$rootScope, $http){
 	$rootScope.pageTitle = "PLANNER";
 	$rootScope.subtitle = "";
 	$(".nav").find(".active").removeClass("active");
-        $("#plannerLink").addClass("active");	
-   	console.log("adam");
+    $("#plannerLink").addClass("active");	
+   	
+});
+
+
+app.controller("AvailabilityController", function($scope,$rootScope, $http){
+	$rootScope.pageTitle = "AVAILABILITY|";
+	$rootScope.subtitle = "by type";
+	$(".nav").find(".active").removeClass("active");
+	$("availabilityLink").addClass("active");	
+   	
+});
+
+
+$(document).ready(function(){
+	$("#myModal").modal({show: false});
+	$("#myMessageModal").modal({show: false});
+
+	
 });

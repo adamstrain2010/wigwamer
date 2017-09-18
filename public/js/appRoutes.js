@@ -23,10 +23,20 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			templateUrl: 'views/dashboard/inHouse.html',
 			controller: 'DashboardInHouseController'
 		})
+		
+		.when('/dashboard/newReservation', {
+			templateUrl: 'views/dashboard/newReservation.html',
+			controller: 'NewReservationController'
+		})
 
 		.when('/planner', {
 			templateUrl: 'views/planner.html',
 			controller: 'PlannerController'	
+		})
+		
+		.when('/reservations/availability', {
+			templateUrl: 'views/reservations/availability.html',
+			controller: 'AvailabilityController'	
 		})
 		
 		.otherwise({
