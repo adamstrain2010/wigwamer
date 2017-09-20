@@ -99,6 +99,10 @@ modal-dialog{
 	text-transform: uppercase;
 }
 
+.contextLink:hover{
+	text-decoration: none;
+}
+
 #myModalLabel{
 	padding: 0 15px;
 }
@@ -133,7 +137,7 @@ input[type=text].modalInput, .modal-title{
 	text-transform: capitalize;
 }
 
-tr:hover, .table-striped > tbody > tr:nth-of-type(odd):hover{
+tr:hover:not(.headerRow), .table-striped > tbody > tr:nth-of-type(odd):not(.headerRow):hover{
 	background-color: rgba(255,165,0,0.1);
 }
 
@@ -200,4 +204,34 @@ input::-webkit-input-placeholder{
 .resultRow:hover{
 	color: white;
 	cursor: pointer;
+}
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.panelNoPadding{
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.headingWhite>h5{
+	color: #FF9800;
+}
+
+.titleHead{
+	display: inline-block;
+}
+
+.btnDark{
+	background-color: #cc7a00;
+}
+
+.dateContainer{
+	display: flex;
+	height: 100%;
+	flex-flow: column;
 }

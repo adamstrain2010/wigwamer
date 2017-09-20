@@ -45,14 +45,14 @@
 			</ul>
 		</li>
 		<li id="plannerLink"><a href="#">Roll Day</a></li>
-		<li id="plannerLink"><a href="" ng-click="search()">Search</a></li>
+		<li id="plannerLink" id="searchLink"><a href="/search">Search</a></li>
 		<li><a href="/">Log Out</a></li>
       </ul>
-      <form class="navbar-form navbar-right" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-      </form>
+	  <div id="dateContainer">
+		  <div class="pull-right">
+			<h5 style="color: white; text-transform: uppercase">{{systemDateLong}}</h5>
+		  </form>
+	  </div>
     </div>
   </div>
 </nav>

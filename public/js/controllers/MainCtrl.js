@@ -53,14 +53,24 @@ app.factory("reservations", function($http){
 	var cancel = function(reservationNum){
 		var apiUrl = 'http://52.19.183.139:1234/api/cancelReservation?reservationNum=' + reservationNum;
 		return $http.post(apiUrl);
-	}
+	};
+	var newReservation = function(surname, forename, arrivalDate,departureDate, bookingSource){
+		var apiUrl = "http://52.19.183.139:1234/api/saveReservation?surname=" + surname + "&forename=" + forename + "&arrivalDate=" + arrivalDate + "&departureDate=" + departureDate + "&bookingSource=" + bookingSource;
+		return $http.post(apiUrl);
+	};
+	var checkout = function(reservationId){
+		var apiUrl = 'http://52.19.183.139:1234/api/checkOut?reservationNum=' + reservationId;
+		return $http.post(apiUrl);
+	};
 	return{
 		getReservationsDeparting: getReservationsByDepartDate,
 		method2: getReservationByArrivalDate,
 		reservationsInHouse: getReservationsInHouse,
 		checkInSingle: checkInIndividual,
 		doSearch: searchReservations,
-		cancelReservation: cancel
+		cancelReservation: cancel,
+		createReservation: newReservation,
+		checkOut: checkout
 	}
 });
 
@@ -118,6 +128,9 @@ app.factory("helpers",function(){
 
 app.controller('LoginController', function($scope,$rootScope,$location, $http) {
 	$rootScope.location =  $location;
+	
+	$rootScope.systemDate = '2017-11-01';
+	
 	$("body").css("backgroundColor","#ECEBD6");
 	$scope.tagline = 'WIGWAMER LOGIN!';	
 	
@@ -197,6 +210,14 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope, T
 		$scope.modalContextOpen = state;
 	}
 	$scope.modalContextOpen = "reservation";
+	
+	$rootScope.systemDate = '2017-11-01';
+	$rootScope.systemDateLong = moment('2017-11-01').format("dddd, MMMM Do YYYY");
+	
+	$scope.modalMenuOptions = [{"title": "Reservation","state":"reservation"},{"title": "Breakdown","state":"breakdown"},{"title": "Posting","state":"posting"},{"title": "History","href":"history"}]
+	
+	$scope.contextMenu = {"title":"check in", "function":"checkIn(this.selectedReservation.reservationId)"};
+	
 	
 	$scope.checkIn = function(el){
 		reservations.checkInSingle(el)
@@ -352,6 +373,23 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope, T
 
 //DEPARTURES CONTROLLER
 app.controller('DashboardDeparturesController',function($scope,$http,$rootScope, TestService, getReservation, helpers, reservation, reservations){
+	$scope.checkOut = function(resNum){
+		reservations.checkOut(resNum)
+		.then(function(response){
+			alert("checked out!");
+			console.log(response);
+		})
+		.then(function(){
+			reservations.getReservationsDeparting($scope.departDate).then(function(response){
+			$scope.reservations = response.data.recordset;
+			$scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
+			})
+		})
+		.catch(function(err){
+			console.log(err);
+		});
+	};   
+	
 	console.log("yep");
 	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
 	$rootScope.pageTitle = "DASHBOARD|";
@@ -446,15 +484,61 @@ app.controller('DashboardInHouseController',function($scope,$http,$rootScope, Te
 	}
 });
 
-app.controller("NewReservationController", function($scope,$rootScope, $http){
+app.controller("NewReservationController", function($scope,$rootScope, $http, reservations, $location){
+	$("#surnameInput").focus();
+	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
+	$scope.save = function(){
+		console.log($scope.bookingsSource);
+		console.log($scope.arrivalDate);
+		var fromDate = moment($scope.arrivalDate, 'DD/MM/YYYY').format("YYYY-MM-DD");
+		var toDate = moment($scope.departureDate, 'DD/MM/YYYY').format("YYYY-MM-DD")
+		console.log(fromDate);
+		console.log(toDate);
+		reservations.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource)
+		.then(function(result){
+			console.log(result);
+			alert("reservation created successfully!");
+			$location.path('/dashboard/arrivals');
+		})
+		.catch(function(err){
+			console.log(err);
+		});
+	};
+	
+	$scope.expanded = false;
+	$scope.show = function(){
+		console.log($scope.expanded);
+	};
 	$rootScope.pageTitle = "DASHBOARD|";
 	$rootScope.subtitle = "new reservation";
 	$scope.clearForm = function(){
 		console.log("clearing");
 		$("#newResForm").find(".form-control").val("");
-		$("#newResForm").find(".form-control").valueAsDate = null;
+		//$("#newResForm").find(".form-control").valueAsDate = null;
 	}
+	
+	$scope.currentDate = moment('01/11/2017', "DD/MM/YYYY");
+	console.log($rootScope.currentDate);
+	var date_input=$('#arrival, #departure'); //our date input has the name "date"
+	var container=$('#whatever');;
+	var options={
+		format: 'dd/mm/yyyy',
+		startDate: new Date(2017,10,01),
+		todayHighlight: true,
+		calendarWeeks: false,
+		autoclose: true,
+		todayBtn: false,
+		todayHighlight: true,
+		weekStart: 1,
+		toValue: function (date, format, language) {
+            date.format= 'yyyy-mm-dd'
+        }
+	};
+	date_input.datepicker(options);
 });
+
+// , 
+// defaultViewDate: $scope.currentDate.format("yyyy-mm-dd")
 
 app.controller("PlannerController", function($scope,$rootScope, $http){
 	$rootScope.pageTitle = "PLANNER";
@@ -470,6 +554,14 @@ app.controller("AvailabilityController", function($scope,$rootScope, $http){
 	$rootScope.subtitle = "by type";
 	$(".nav").find(".active").removeClass("active");
 	$("availabilityLink").addClass("active");	
+   	
+});
+
+app.controller("SearchController", function($scope,$rootScope, $http){
+	$rootScope.pageTitle = "SEARCH";
+	$rootScope.subtitle = "";
+	$(".nav").find(".active").removeClass("active");
+	$("#searchLink").addClass("active");	
    	
 });
 
