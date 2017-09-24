@@ -1,5 +1,4 @@
-angular.module('NerdCtrl', []).controller('NerdController', function($scope) {
+angular.module('NerdCtrl', []).controller('NerdController', function($scope, $http) {
+	console.log("yep");
 	
-	$scope.tagline = 'Nothing beats a pocket protector!';
-
 });

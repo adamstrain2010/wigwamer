@@ -48,13 +48,15 @@
 					<div class="panel-body">
 						<div class="form-group" id="whatever"> 
 							<!-- Date input -->
-							<label class="control-label" for="date">Arriving</label>
-							<input class="form-control" id="arrival" name="arrivingDate" placeholder="DD/MM/YYYY" type="text" ng-model="arrivalDate" />
+							<label class="control-label" for="date">Arriving</label><br>
+							<!-- <input class="form-control" id="arrival" name="arrivingDate" placeholder="DD/MM/YYYY" type="text" ng-model="arrivalDate" /> -->
+							<md-datepicker ng-model="arrivalDate" id="arrival" name="arrivingDate" class=""></md-datepicker>
 						</div>
 						<div class="form-group"> 
 							<!-- Date input -->
-							<label class="control-label" for="date">Departing</label>
-							<input class="form-control" id="departure" name="departingDate" placeholder="DD/MM/YYYY" type="text" ng-model="departureDate" />
+							<label class="control-label" for="date">Departing</label><br>
+							<!-- <input class="form-control" id="departure" name="departingDate" placeholder="DD/MM/YYYY" type="text" ng-model="departureDate" /> -->
+							<md-datepicker ng-model="departureDate" id="departure" name="departingDate"></md-datepicker>
 						</div>
 						<div class="expander" ng-show="expanded">
 							<div class="form-group">
@@ -89,8 +91,7 @@
 						<div class="form-group">
 							<label>Room Type</label>
 							<select class="form-control">
-								<option>Single</option>
-								<option>Double</option>
+								<option ng-repeat="roomType in roomTypes" data-unittypeid='{{roomType.idunittype}}'>{{roomType.unittypedesc}}</option>
 							</select>
 						</div>
 						<div class="form-group">
@@ -137,7 +138,9 @@
 						<label>Booking Source</label>
 							<select class="form-control" ng-model="bookingsSource">
 								<option value="1">Booking.com</option>
-								<option value="2">Hostelworld</option>
+								<option value="2">AirBnB</option>
+								<option value="3">Expedia</option>
+								<option value="4">Hostelworld</option>
 							</select>
 					</div>
 				</div>
@@ -166,5 +169,28 @@
 	</div>
 	<div class="col-md-1">
 		<button class="btn btn-default btnNegative choiceButtons" ng-click="clearForm()">Clear</button>
+	</div>
+</div>
+
+<div class="modalBack">
+	<div class="messageModal modal-small" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modalContent">
+			<div class="modalHeader modal-header-primary">
+				<div class="row">
+					<div class="col-md-12 padBottom15 noSidePad">
+						<button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span class="white" aria-hidden="true">&times;</span></button>
+						<h5 class="modal-title white" id="myModalLabel"><span style="font-size: 1.2em"><i class='fa fa-check' aria-hidden='true'></i></span> {{message.title }}</h4>
+					</div>
+				</div>
+			</div>
+			<div class="modalBody">
+				<div class="row">
+					{{ message.body }}
+				</div>
+			</div>
+			<div class="modalFooter">
+				<button type="button" class="btn btn-default choiceButtons closeBtn" id="modalButton" ng-click="goToArrivals()">OK</button>
+			</div>
+		</div>
 	</div>
 </div>

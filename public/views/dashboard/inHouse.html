@@ -8,11 +8,11 @@
 				<th>Details</th>
 			</tr>
 			<tr ng-repeat="reservation in reservations | orderBy:sortType:sortReverse">
-				<td>{{ reservation.reservationId }}</td>
-				<td>{{ reservation.reservationName }}</td>
-				<td>{{ reservation.arrivalDate }}</td>
-				<td>{{ reservation.departureDate }}</td>
-				<td>{{ reservation.bookingSource }}</td>
+				<td>{{ reservation.idreservation }}</td>
+				<td>{{ reservation.reservationname }}</td>
+				<td>{{ reservation.fromdate }}</td>
+				<td>{{ reservation.todate }}</td>
+				<td>{{ reservation.reservationsourcecode }}</td>
 				<td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal"><i class="fa fa-address-book-o" aria-hidden="true"></i></button></td>
 			</tr>
 		<table>
