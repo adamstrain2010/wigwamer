@@ -1,14 +1,4 @@
-var app = angular.module('MainCtrl', ['ngAria', 'ngAnimate','ngMaterial']);
-
-app.config(function($mdDateLocaleProvider) {
-    $mdDateLocaleProvider.formatDate = function(date) {
-       return moment(date).format('DD/MM/YYYY');
-    };
-});
-
-
-
-
+var app = angular.module('MainCtrl', ['ngAria', 'ngAnimate','ngMaterial', 'ui.router']);
 
 app.factory("reservation", function($http){
 	return {
@@ -43,20 +33,34 @@ app.factory("helpers",function(){
 	}
 });
 
-app.run(function($rootScope, $http, dashboard){
+app.run(function($rootScope, $http, $location, dashboard, dashboard){
 	$rootScope.rollDay = function(){
 		console.log("rolling");
-		var apiUrl = 'http://52.19.183.139:1234/api/rollDay';
-		if(confirm("Do you definitely want to roll the day?")){
-			$http.post(apiUrl)
-			.then(function(result){
-				alert("Day Rolled.")
-				console.dir(result.data.outDate);
-			})
-			.catch(function(err){
-				console.log(err);
-			});
-		};
+		console.log(moment($rootScope.globalSystemDate).format("YYYY-MM-DD"));
+		dashboard.getReservationsDeparting($rootScope.globalSystemDate.format("YYYY-MM-DD"))
+		.then(function(data){
+			var departures = data.data.recordset.length;
+			console.log(departures);
+			if(departures == 0){
+				var apiUrl = 'http://52.19.183.139:1234/api/rollDay';
+				if(confirm("Do you definitely want to roll the day?")){
+					$http.post(apiUrl)
+					.then(function(result){
+						alert("Day Successfully Rolled.")
+						$location.path('/');
+					})
+					.catch(function(err){
+						console.log(err);
+					});
+				};
+			}
+			else{
+				alert("You still have departures to process");
+			}
+		})
+		.catch(function(err){
+			console.log(err);
+		})
 	};
 });
 

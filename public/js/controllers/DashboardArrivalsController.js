@@ -1,5 +1,25 @@
 //ARRIVALS CONTROLLER
-app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  helpers, reservation, dashboard,$animate, $mdDialog){
+app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  helpers, reservation, dashboard,appService, $animate, $mdDialog, $mdToast){
+	
+	
+	//JUST FOR DEV
+	//DELETE AFTERWARDS
+	$scope.tester = false;
+	
+	appService.getSystemDate()
+	.then(function(result){
+		$rootScope.globalSystemDate = moment(result.data.recordset[0].systemdate);
+		$rootScope.displayDate = moment(result.data.recordset[0].systemdate).format("Do MMMM YYYY");
+		$scope.systemDate = moment(result.data.recordset[0].systemdate).format("YYYY-MM-DD");
+	})
+	.then(function(){
+		getReservations($scope.systemDate);
+	})
+	.catch(function(err){
+		console.log(err);
+	});
+	
+	
 	$scope.testModal = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
 		var confirm = $mdDialog.confirm()
@@ -59,11 +79,24 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 	// }
 	
 	
+	$scope.showSimpleToast = function(){
+		$mdToast.show(
+			$mdToast.simple()
+			.position('top right')
+			.textContent('Reservation Cancelled')
+		)
+	};
+
+	
+	// $scope.openToast = function($event) {
+		// $mdToast.show($mdToast.simple().textContent('Reservation cancelled').position("bottom right"));
+	// };
+	
 	$scope.carryOutCancellation = function(){
 		resNum = this.selectedReservation.idreservation;
 		dashboard.cancelReservation(resNum)
 		.then(function(data){
-			dashboard.getReservations($scope.arrivalDate)
+			dashboard.getReservations($scope.systemDate)
 			.then(function(response){
 				$scope.loaded = false;
 				$scope.reservations = response.data.recordset;
@@ -74,7 +107,8 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 			.then(function(){
 				$scope.message = {"title": "Cancelled", "body": "Reservation #" + resNum + " has been cancelled."};
 				$(".decisionModal").css("display","none");
-				$(".messageModal").css("display","block");
+				//$(".messageModal").css("display","block");
+				$scope.showSimpleToast();
 			})
 		})
 	}
@@ -82,9 +116,6 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 	
 	
 	$scope.numReservations = null;
-	//JUST FOR DEV
-	//DELETE AFTERWARDS
-	$scope.tester = false;
 	
 	
 	$scope.loaded = false;
@@ -97,7 +128,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 		var apiUrl = "http://52.19.183.139:1234/api/changeAllToReservation";
 		$http.post(apiUrl)
 		.then(function(){
-			dashboard.getReservations($scope.arrivalDate)
+			dashboard.getReservations($scope.systemDate)
 			.then(function(response){
 				$scope.reservations = response.data.recordset;
 				$scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
@@ -122,7 +153,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 		console.log(el);
 		dashboard.checkInSingle(el)
 		.then(function(data){
-				dashboard.getReservations($scope.arrivalDate)
+				dashboard.getReservations($scope.systemDate)
 				.then(function(response){
 					$scope.loaded = false;
 					$scope.reservations = response.data.recordset;
@@ -203,17 +234,22 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 	
 	$scope.printInfo = dashboard.showData;
 	
+	function getReservations(arrivalDate){
+		dashboard.getReservations($scope.systemDate)
+		.then(function(response){
+			$scope.reservations = response.data.recordset;
+			$scope.numReservations = $scope.reservations.length;
+			$scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
+			$scope.loaded = true;
+		});
+	}
+	
 	$scope.reservation = {reservationNum: -1, surname:"surname", forename:"forename", reservationName: "surname,forename",arrivalDate: moment("1900-01-01"), departureDate: moment("1900-01-01"),bookingSource:-1};
 	$scope.reservations;
 	$scope.selectedReservation;
-	
-	dashboard.getReservations($scope.arrivalDate).then(function(response){
-		$scope.reservations = response.data.recordset;
-		$scope.numReservations = $scope.reservations.length;
-		$scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
-		$scope.loaded = true;
-	});
+	//getReservations();
 
+	
 	$scope.selectedReservation;
 	
 	$scope.setCurrentReservation = function(reservationNum){
@@ -233,31 +269,31 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 		})
 	};
 
-	$scope.saveReservation = function(){
-		console.log(helpers.urlEncodeObject($scope.selectedReservation));
-		reservation.save(encodeURI(helpers.urlEncodeObject($scope.selectedReservation)))
-		.then(function(){
-			alert("Saved Successfully!");	
-		})
-		.catch(function(err){
-			console.log(err);
-		});		
-	};
+	// $scope.saveReservation = function(){
+		// console.log(helpers.urlEncodeObject($scope.selectedReservation));
+		// reservation.save(encodeURI(helpers.urlEncodeObject($scope.selectedReservation)))
+		// .then(function(){
+			// alert("Saved Successfully!");	
+		// })
+		// .catch(function(err){
+			// console.log(err);
+		// });		
+	// };
 	
-	$scope.createReservation = function(){
-		console.log("yep");
-		$http.post("http://52.19.183.139:1234/api/createReservation")
-		.then(function(data){
-			dashboard.getReservations($scope.arrivalDate).then(function(response){
-				$scope.reservations = response.data.recordset;
-				$scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
-			});
-		});
-	};
+	// $scope.createReservation = function(){
+		// console.log("yep");
+		// $http.post("http://52.19.183.139:1234/api/createReservation")
+		// .then(function(data){
+			// dashboard.getReservations($scope.arrivalDate).then(function(response){
+				// $scope.reservations = response.data.recordset;
+				// $scope.reservations.forEach(function(r){ r.arrivalDate = moment(r.arrivalDate).format("DD/MM/YY"); r.departureDate = moment(r.departureDate).format("DD/MM/YY")});
+			// });
+		// });
+	// };
 	
 	$scope.add500Reservations = function(){
 		for(var i = 0; i < $scope.newResN; i++){
-			dashboard.createReservation("Strain", "Adam", '2017-06-11', '2017-06-12', 1)
+			dashboard.createReservation("Strain", "Adam", $scope.systemDate, $scope.systemDate, 1)
 			.then(function(result){
 				console.log(result);
 				console.log("reservation #" + i + "created successfully!");
@@ -267,13 +303,14 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 			});
 		}
 		console.log("ALL RESERVATIONS ADDED");
-		dashboard.getReservations($scope.arrivalDate).then(function(response){
-			$scope.loaded = false;
-			$scope.reservations = response.data.recordset;
-			$scope.numReservations = $scope.reservations.length;
-			$scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
-			$scope.loaded = true;
-		});
+		getReservations($scope.systemDate);
+		// dashboard.getReservations($scope.arrivalDate).then(function(response){
+			// $scope.loaded = false;
+			// $scope.reservations = response.data.recordset;
+			// $scope.numReservations = $scope.reservations.length;
+			// $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
+			// $scope.loaded = true;
+		// });
 	};
 	
 	
@@ -281,14 +318,15 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 		console.log("going");
 		dashboard.cancelAll()
 		.then(function(data){
-			dashboard.getReservations($scope.arrivalDate)
-			.then(function(response){
-				$scope.loaded = false;
-				$scope.reservations = response.data.recordset;
-				$scope.numReservations = $scope.reservations.length;
-				$scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
-				$scope.loaded = true;
-			});
+			getReservations($scope.systemDate);
+			// dashboard.getReservations($scope.arrivalDate)
+			// .then(function(response){
+				// $scope.loaded = false;
+				// $scope.reservations = response.data.recordset;
+				// $scope.numReservations = $scope.reservations.length;
+				// $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
+				// $scope.loaded = true;
+			// });
 		})
 		.catch(function(err){
 			console.log(err);

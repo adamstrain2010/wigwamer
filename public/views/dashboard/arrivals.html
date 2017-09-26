@@ -22,7 +22,7 @@
 		<td>{{ reservation.fromdate }}</td>
 		<td>{{ reservation.todate }}</td>
 		<td>{{reservation.reservationsourcecode | uppercase}}-1234567</td>
-		<td><span class="bSource" style="background-color: {{reservation.reservationcolour}}; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold">{{ reservation.reservationsourcecode }}</span></td>
+		<td><span data-toggle="tooltip" title="{{reservation.reservationsourcedescription}}" class="bSource" style="background-color: {{reservation.reservationcolour}}; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold">{{ reservation.reservationsourcecode }}</span></td>
 		<td>£76.00</td>
 		<td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal"><i class="fa fa-address-book-o" aria-hidden="true"></i></button></td>
 	</tr>

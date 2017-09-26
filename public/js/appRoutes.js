@@ -34,9 +34,19 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			controller: 'PlannerController'	
 		})
 		
+		.when('/allocations', {
+			templateUrl: 'views/allocations.html',
+			controller: 'AllocationsController'
+		})
+		
 		.when('/reservations/availability', {
 			templateUrl: 'views/reservations/availability.html',
 			controller: 'AvailabilityController'	
+		})
+		
+		.when('/housekeeping', {
+			templateUrl: 'views/housekeeping.html',
+			controller: 'HousekeepingController'	
 		})
 		
 		.when('/search', {

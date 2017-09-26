@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" ng-controller="NavBarController">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
@@ -16,15 +16,13 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reservations<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">New Reservation</a></li>
-            <li><a href="#">Find Reservation</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Allocations</a></li>
-            <li><a href="#">Separated link</a></li>
+            <li><a href="/dashboard/newReservation">New Reservation</a></li>
             <li class="divider"></li>
             <li><a href="reservations/availability" id="availabilityLink">Availability</a></li>
+            <li><a href="/allocations">Allocations</a></li>
           </ul>
         </li>
+		<li id="plannerLink"><a href="/housekeeping">Housekeeping</a></li>
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin<span class="caret"></span></a>
 			
@@ -50,7 +48,7 @@
       </ul>
 	  <div id="dateContainer">
 		  <div class="pull-right">
-			<h5 style="color: white; text-transform: uppercase">{{systemDate}}</h5>
+			<h5 style="color: white">{{displayDate}}</h5>
 		  </form>
 	  </div>
     </div>

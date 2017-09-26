@@ -22,8 +22,8 @@ app.factory("dashboard", function($http){
 		var apiUrl = 'http://52.19.183.139:1234/api/cancelReservation?reservationNum=' + reservationNum;
 		return $http.post(apiUrl);
 	};
-	var newReservation = function(surname, forename, arrivalDate,departureDate, bookingSource){
-		var apiUrl = "http://52.19.183.139:1234/api/saveReservation?clientId=1&surname=" + surname + "&forename=" + forename + "&arrivalDate=" + arrivalDate + "&departureDate=" + departureDate + "&bookingSource=" + bookingSource;
+	var newReservation = function(surname, forename, arrivalDate,departureDate, bookingSource, nationalityId){
+		var apiUrl = "http://52.19.183.139:1234/api/saveReservation?clientId=1&surname=" + surname + "&forename=" + forename + "&arrivalDate=" + arrivalDate + "&departureDate=" + departureDate + "&bookingSource=" + bookingSource + "&idNationality=" + nationalityId;
 		return $http.post(apiUrl);
 	};
 	var checkout = function(reservationId){
@@ -55,7 +55,12 @@ app.factory("dashboard", function($http){
 	var cancelall = function(){
 		var apiUrl = 'http://52.19.183.139:1234/api/cancelAll';
 		return $http.post(apiUrl);
+	};
+	var getroomsbasedonroomtype = function(roomTypeId){
+		var apiUrl = 'http://52.19.183.139:1234/api/getRoomsBasedOnRoomType?roomTypeId=' + roomTypeId;
+		return $http.get(apiUrl);
 	}
+	
 	return{
 		getReservationsDeparting: getReservationsByDepartDate,
 		method2: getReservationByArrivalDate,
@@ -68,7 +73,8 @@ app.factory("dashboard", function($http){
 		getDate: getdate,
 		getReservations: getreservations,
 		showData: showdata,
-		cancelAll: cancelall
+		cancelAll: cancelall,
+		getRoomsFromRoomType: getroomsbasedonroomtype
 	}
 });
 

@@ -1,4 +1,7 @@
 app.controller("AvailabilityController", function($scope, $rootScope, $location, appService){
+	$rootScope.pageTitle = "AVAILABILITY|";
+	$rootScope.subtitle = "available";
+	
 	appService.getRoomTypes(1)
 	.then(function(data){
 		$scope.roomTypes = data.data.recordset;
@@ -7,6 +10,9 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 	.catch(function(err){
 		console.log(err);
 	});
+	
+	
+	$rootScope.contextMenuOptions = [{"title": "Available","href":"reservations/availability"},{"title": "Booked","href":"dashboard/departures"},{"title": "Rates","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
 	
 	var dates = [];
 	$(document).on("mousedown",'.dayCell', function(){

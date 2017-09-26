@@ -23,12 +23,8 @@
 							</div>
 							<div class="form-group">
 								<label>Nationality</label>
-								<select class="form-control" ng-model="nationalityId">
-									<option>American</option>
-									<option>Australian</option>
-									<option>British</option>
-									<option>Irish</option>
-									<option>New Zealand</option>
+								<select class="form-control" ng-model="nationality" ng-options="country.countryname for country in nationalities">
+								<option selected value="">TBC</option>
 								</select>
 							</div>
 						</div>
@@ -49,8 +45,7 @@
 						<div class="form-group" id="whatever"> 
 							<!-- Date input -->
 							<label class="control-label" for="date">Arriving</label><br>
-							<!-- <input class="form-control" id="arrival" name="arrivingDate" placeholder="DD/MM/YYYY" type="text" ng-model="arrivalDate" /> -->
-							<md-datepicker ng-model="arrivalDate" id="arrival" name="arrivingDate" class=""></md-datepicker>
+							<md-datepicker ng-model="arrivalDate" id="arrival" name="arrivingDate" class="" ></md-datepicker>
 						</div>
 						<div class="form-group"> 
 							<!-- Date input -->
@@ -90,16 +85,13 @@
 					<div class="panel-body">
 						<div class="form-group">
 							<label>Room Type</label>
-							<select class="form-control">
-								<option ng-repeat="roomType in roomTypes" data-unittypeid='{{roomType.idunittype}}'>{{roomType.unittypedesc}}</option>
+							<select class="form-control" ng-model="selectedUnitType" ng-options="roomtype.unittypedesc for roomtype in roomTypes" ng-change="selectUnitType(selectedUnitType.idunittype)">
 							</select>
 						</div>
 						<div class="form-group">
 							<label>Room</label>
-							<select class="form-control">
-								<option>101</option>
-								<option>102</option>
-								<option>103</option>
+							<select class="form-control" ng-model="selectedUnit" ng-options="room.unitdescription for room in rooms">
+								<option selected disabled>Select a room type first</option>
 							</select>
 						</div>
 						<div class="expander" ng-show="expanded">
