@@ -13,7 +13,8 @@
     "method-override": "~2.0.2",
     "moment": "^2.18.1",
     "mongoose": "~3.8.0",
-    "mssql": "^4.0.4"
+    "mssql": "^4.0.4",
+    "seriate": "^0.10.0"
   },
   "scripts": {
     "start": "> nohup.out; echo 'deleted';  node server.js"

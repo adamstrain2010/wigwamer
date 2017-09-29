@@ -312,3 +312,23 @@ input::-webkit-input-placeholder{
 md-dialog{
 	opacity: 1 !important;
 }
+
+.red{
+	color: red;
+	font-weight: bold;
+}
+
+.hoop{
+	display: block;
+	height: 30px;
+	width: 30px;
+	line-height: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	background-color: RED;
+	color: white;
+	text-align: center;
+	font-size: 1em;
+	margin: 0 auto;
+	color: white;
+}

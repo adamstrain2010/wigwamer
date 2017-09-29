@@ -1,18 +1,35 @@
-<table class="table table-striped table-bordered">
+<div class="text-center" ng-show="!loaded">
+	<i class="fa fa-circle-o-notch fa-spin loader" aria-hidden="true"></i>
+</div>
+<div class="row" style="padding-bottom: 15px" ng-show="loaded">
+	<div class="col-md-2">
+	</div>
+	<div class="col-md-2">
+	</div>
+	<div class="col-md-2">
+	</div>
+	<div class="col-md-2">
+	</div>
+	<div class="col-md-2">
+		<!-- Date input -->
+		<label class="control-label" for="date">From</label><br>
+		<md-datepicker ng-model="arrivalDate" id="arrival" name="arrivingDate" class="" ></md-datepicker>
+		<!-- Date input -->
+	</div>
+	<div class="col-md-2">
+		<label class="control-label" for="date">To</label><br>
+		<md-datepicker ng-model="arrivalDate" id="arrival" name="arrivingDate" class="" ></md-datepicker>
+	</div>
+</div>
+<table class="table table-striped table-bordered" ng-show="loaded">
 	<tr>
 		<th></th>
-		<th><a class="noFingerLink">01/11/2017</a></th>
-		<th><a class="noFingerLink">02/11/2017</a></th>
-		<th><a class="noFingerLink">03/11/2017</a></th>
-		<th><a class="noFingerLink">04/11/2017</a></th>
+		<th ng-repeat="day in availRows[0]"><a class="noFingerLink">{{day.configdate}}</a></th>
 	</tr>
 	<tbody>
-		<tr ng-repeat="roomType in roomTypes">
-			<td>{{roomType.unittypedesc}}</td>
-			<td class="dayCell" data-date="2017-11-01" data-unitType="{{roomType.idunittype}}">1</td>
-			<td class="dayCell" data-date="2017-11-02" data-unitType="{{roomType.idunittype}}">2</td>
-			<td class="dayCell" data-date="2017-11-03" data-unitType="{{roomType.idunittype}}">0</td>
-			<td class="dayCell" data-date="2017-11-04" data-unitType="{{roomType.idunittype}}">0</td>
+		<tr ng-repeat="roomType in availRows">
+			<td style="text-align: left; font-weight: bold">{{roomType[0].unittypedesc}}</td>
+			<td ng-repeat="availRow in roomType" ng-class="{'red' :  {{availRow.unitsavailable}} < 0}"><span ng-class="{'hoop' :  {{availRow.unitsavailable}} < 0}">{{availRow.unitsavailable}}</span></td>
 		</tr>	
 	</tbody>
 </table>

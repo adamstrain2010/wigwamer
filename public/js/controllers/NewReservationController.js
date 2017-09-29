@@ -58,6 +58,7 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
 	
 	$scope.save = function(){
+		console.log($scope.selectedUnitType.idunittype);
 		$rootScope.newResFlag = false;
 		console.log($scope.bookingsSource);
 		console.log($scope.arrivalDate);
@@ -66,8 +67,8 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 		console.log(fromDate);
 		console.log(toDate);
 		if($scope.nationality == null){
-			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, -1)
-						.then(function(result){
+			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, 900, $scope.selectedUnitType.idunittype)
+			.then(function(result){
 				$scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
 				$(".messageModal").css("display", "block");
 				$(".modalBack").css("display","block");
@@ -78,7 +79,7 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 			});
 		}
 		else{
-			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry)
+			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry,$scope.selectedUnitType.idunittype)
 			.then(function(result){
 				$scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
 				$(".messageModal").css("display", "block");

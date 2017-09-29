@@ -1,11 +1,12 @@
 //ARRIVALS CONTROLLER
 app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  helpers, reservation, dashboard,appService, $animate, $mdDialog, $mdToast){
-	
-	
+
 	//JUST FOR DEV
 	//DELETE AFTERWARDS
-	$scope.tester = false;
-	
+
+    $scope.tester = false;
+
+
 	appService.getSystemDate()
 	.then(function(result){
 		$rootScope.globalSystemDate = moment(result.data.recordset[0].systemdate);
@@ -14,11 +15,13 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 	})
 	.then(function(){
 		getReservations($scope.systemDate);
-	})
+		$scope.arrivalDate = moment($rootScope.globalSystemDate, "DD/MM/YYYY").toDate();
+        $scope.departDate = moment($rootScope.globalSystemDate, "DD/MM/YYYY").toDate();;
+    })
 	.catch(function(err){
-		console.log(err);
-	});
-	
+        console.log(err);
+    });
+
 	
 	$scope.testModal = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -123,7 +126,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 		$(".modalBack").css("display", "none");
 	})
 	
-	$scope.arrivalDate = '2017-06-11';
+	// $scope.arrivalDate = '2017-06-11';
 	$scope.changeToResAll = function(){
 		var apiUrl = "http://52.19.183.139:1234/api/changeAllToReservation";
 		$http.post(apiUrl)
@@ -257,8 +260,8 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 		dashboard.showData(reservationNum.reservation.idreservation)
 		.then(function(res){
 			$scope.selectedReservation = res.recordset[0]; 
-			$scope.selectedReservation.arrivalDate = moment($scope.selectedReservation.fromdate).format("YYYY-MM-DD");
-			$scope.selectedReservation.departureDate = moment($scope.selectedReservation.todate).format("YYYY-MM-DD");
+			$scope.selectedReservation.arrivalDate = moment($scope.selectedReservation.fromdate).toDate();
+			$scope.selectedReservation.departureDate = moment($scope.selectedReservation.todate).toDate();
 			console.log($scope.selectedReservation);
 			console.log(helpers.urlEncodeObject($scope.selectedReservation));
 			$(".modalFullHeight").css("display", "block");
@@ -291,17 +294,17 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 		// });
 	// };
 	
-	$scope.add500Reservations = function(){
+	$scope.add500Reservations = function(callback){
 		for(var i = 0; i < $scope.newResN; i++){
-			dashboard.createReservation("Strain", "Adam", $scope.systemDate, $scope.systemDate, 1)
-			.then(function(result){
-				console.log(result);
-				console.log("reservation #" + i + "created successfully!");
-			})
+			var ranNum = Math.floor(Math.random()*4) + 1
+			console.log(ranNum);
+			console.log((i + 1) + "/" + $scope.newResN);
+			dashboard.createReservation("Strain", "Adam", $scope.systemDate, $scope.systemDate, ranNum, 1)
 			.catch(function(err){
 				console.log(err);
 			});
 		}
+		console.log($scope.newResN + " reservations entered.");
 		console.log("ALL RESERVATIONS ADDED");
 		getReservations($scope.systemDate);
 		// dashboard.getReservations($scope.arrivalDate).then(function(response){
@@ -344,5 +347,9 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 	
 	
 	
-});	
+}).config(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function (date) {
+        return date ? moment(date).format('DD/MM/YYYY') : ''
+    }
+});
 

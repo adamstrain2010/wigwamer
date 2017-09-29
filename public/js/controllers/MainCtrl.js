@@ -1,4 +1,4 @@
-var app = angular.module('MainCtrl', ['ngAria', 'ngAnimate','ngMaterial', 'ui.router']);
+var app = angular.module('MainCtrl', ['ngAria', 'ngAnimate','ngMaterial', 'ui.router', 'ngCookies']);
 
 app.factory("reservation", function($http){
 	return {
@@ -33,7 +33,11 @@ app.factory("helpers",function(){
 	}
 });
 
-app.run(function($rootScope, $http, $location, dashboard, dashboard){
+app.run(function($rootScope, $http, $location, $cookies, $cookieStore, dashboard, dashboard){
+
+
+	var currentUser = $cookieStore.get("user");
+	console.log(currentUser);
 	$rootScope.rollDay = function(){
 		console.log("rolling");
 		console.log(moment($rootScope.globalSystemDate).format("YYYY-MM-DD"));
@@ -46,7 +50,7 @@ app.run(function($rootScope, $http, $location, dashboard, dashboard){
 				if(confirm("Do you definitely want to roll the day?")){
 					$http.post(apiUrl)
 					.then(function(result){
-						alert("Day Successfully Rolled.")
+						console.log("Day Successfully Rolled.")
 						$location.path('/');
 					})
 					.catch(function(err){
@@ -66,7 +70,16 @@ app.run(function($rootScope, $http, $location, dashboard, dashboard){
 
 
 
+Array.prototype.chunk = function (groupsize) {
+    var sets = [];
+    var chunks = this.length / groupsize;
 
+    for (var i = 0, j = 0; i < chunks; i++, j += groupsize) {
+        sets[i] = this.slice(j, j + groupsize);
+    }
+
+    return sets;
+};
 
 
 

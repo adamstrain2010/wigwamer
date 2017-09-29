@@ -53,7 +53,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			templateUrl: 'views/search.html',
 			controller: 'SearchController'	
 		})
-		
+
+		.when('/test',{
+			templateUrl: 'views/test/test.html',
+			controller: 'testController'
+		})
+
 		.otherwise({
 			redirectTo: '/'
 		});

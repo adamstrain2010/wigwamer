@@ -1,19 +1,65 @@
-app.controller("AvailabilityController", function($scope, $rootScope, $location, appService){
+app.controller("AvailabilityController", function($scope, $rootScope, $location, $http, appService, availability){
 	$rootScope.pageTitle = "AVAILABILITY|";
 	$rootScope.subtitle = "available";
-	
-	appService.getRoomTypes(1)
-	.then(function(data){
-		$scope.roomTypes = data.data.recordset;
-		console.log($scope.roomTypes);
-	})
-	.catch(function(err){
-		console.log(err);
-	});
-	
-	
+
+	$scope.loaded = false;
+
+	$scope.negative = true;
+
+    appService.getSystemDate()
+        .then(function(result){
+            $rootScope.globalSystemDate = moment(result.data.recordset[0].systemdate);
+            $rootScope.displayDate = moment(result.data.recordset[0].systemdate).format("Do MMMM YYYY");
+            $scope.departDate = moment(result.data.recordset[0].systemdate).format("YYYY-MM-DD");
+        })
+        .then(function(){
+			availability.getAvailabilityByRange(1,1,1,-1,$rootScope.globalSystemDate.format("YYYY-MM-DD"),$rootScope.globalSystemDate.add('days', 20).format("YYYY-MM-DD"))
+			.then(function(result){
+				$scope.availRows = result.data[0][0].chunk(20);
+                $scope.availRows[0].forEach(function(r){ r.configdate = moment(r.configdate).format("DD/MM/YY")});
+				for(var i = 0; i < $scope.availRows.length; i++){
+					console.log($scope.availRows[i]);
+				};
+				$scope.loaded = true;
+			})
+			.catch(function(err){
+				console.log(err);
+			});
+        })
+		.then(function(){
+			//getRooms();
+		})
+        .catch(function(err){
+            console.log(err);
+        });
+
+    function getRooms(){
+        appService.getRoomTypes(1)
+		.then(function(data){
+			$scope.roomTypes = data.data.recordset;
+		})
+		.catch(function(err){
+			console.log(err);
+		});
+	}
+
+
+
+
+
+
+
+    // availability.getAvailabilityByRange()
+	// .then(function(result){
+	// 	console.log(result.data[0]);
+	// })
+	// .catch(function(err){
+	// 	console.log(err);
+	// });
+
+
 	$rootScope.contextMenuOptions = [{"title": "Available","href":"reservations/availability"},{"title": "Booked","href":"dashboard/departures"},{"title": "Rates","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
-	
+
 	var dates = [];
 	$(document).on("mousedown",'.dayCell', function(){
 		dates = [];

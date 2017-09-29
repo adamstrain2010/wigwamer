@@ -1,5 +1,7 @@
-app.controller('LoginController', function($scope,$rootScope,$location, $http) {
-	
+app.controller('LoginController', function($scope,$rootScope,$location, $http, $cookies, $cookieStore) {
+	$cookieStore.remove("user");
+
+
 	$rootScope.location =  $location;
 	
 	
@@ -21,6 +23,7 @@ app.controller('LoginController', function($scope,$rootScope,$location, $http) {
 				console.log("response comes next")
 				console.log(response.data);
 				console.log(response.data.recordset.length);
+                $cookieStore.put("user", "roger");
 				login(response.data.recordset.length);
 			 }, function errorCallback(err){
 				if(err.data == null){

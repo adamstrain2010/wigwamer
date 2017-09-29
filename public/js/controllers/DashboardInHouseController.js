@@ -1,5 +1,10 @@
 //IN HOUSE CONTROLLER
 app.controller('DashboardInHouseController',function($scope,$http,$rootScope, helpers, reservation, dashboard){
+	
+	$scope.loaded = false;
+	
+	
+	
 	console.log("yep");
 	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
 	$rootScope.pageTitle = "DASHBOARD|";
@@ -15,8 +20,11 @@ app.controller('DashboardInHouseController',function($scope,$http,$rootScope, he
 	$scope.departDate = "2017-11-02";
 	$scope.selecredReservation;
 	dashboard.reservationsInHouse().then(function(response){
+		$scope.loaded = false;
 		$scope.reservations = response.data.recordset;
+		$scope.numReservations = response.data.recordset.length;
 		$scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
+		$scope.loaded = true;
 	});
 
 	$scope.setCurrentReservation = function(reservationNum){

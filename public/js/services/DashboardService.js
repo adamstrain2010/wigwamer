@@ -22,8 +22,9 @@ app.factory("dashboard", function($http){
 		var apiUrl = 'http://52.19.183.139:1234/api/cancelReservation?reservationNum=' + reservationNum;
 		return $http.post(apiUrl);
 	};
-	var newReservation = function(surname, forename, arrivalDate,departureDate, bookingSource, nationalityId){
-		var apiUrl = "http://52.19.183.139:1234/api/saveReservation?clientId=1&surname=" + surname + "&forename=" + forename + "&arrivalDate=" + arrivalDate + "&departureDate=" + departureDate + "&bookingSource=" + bookingSource + "&idNationality=" + nationalityId;
+	var newReservation = function(surname, forename, arrivalDate,departureDate, bookingSource, nationalityId, idUnitType){
+		console.log(idUnitType);
+		var apiUrl = "http://52.19.183.139:1234/api/saveReservation?clientId=1&surname=" + surname + "&forename=" + forename + "&arrivalDate=" + arrivalDate + "&departureDate=" + departureDate + "&bookingSource=" + bookingSource + "&idNationality=" + nationalityId + "&idUnitType=" + idUnitType;
 		return $http.post(apiUrl);
 	};
 	var checkout = function(reservationId){
