@@ -71,7 +71,11 @@ app.factory("dashboard", function($http){
     var getreservationextras = function(idReservation){
         var apiUrl = 'http://52.19.183.139:1234/api/getReservationExtras?idReservation=' + idReservation;
         return $http.get(apiUrl);
-    }
+    };
+    var getcharges = function(idReservation){
+        var apiUrl = "http://52.19.183.139:1234/api/getCharges?idReservation=" + idReservation;
+        return $http.post(apiUrl);
+    };
     return{
         getReservationsDeparting: getReservationsByDepartDate,
         method2: getReservationByArrivalDate,
@@ -88,7 +92,8 @@ app.factory("dashboard", function($http){
         getRoomsFromRoomType: getroomsbasedonroomtype,
         getAllSpecials: getallspecials,
         insertExtra: insertextra,
-        getReservationExtras: getreservationextras
+        getReservationExtras: getreservationextras,
+        getChargeBreakdown: getcharges
     }
 });
 

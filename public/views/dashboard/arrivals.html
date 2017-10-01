@@ -134,14 +134,14 @@
 											<option selected value="">TBC</option>
 										</select>
 									</div>
-								</div>
-								<div class="col-md-3">
 									<div class="form-group">
 										<label>Room</label>
 										<select class="form-control" ng-model="nationality" ng-options="country.countryname for country in nationalities">
 											<option selected value="">TBC</option>
 										</select>
 									</div>
+								</div>
+								<div class="col-md-3">
 								</div>
 							</form>
 						</div>
@@ -157,7 +157,7 @@
 				<div class="row" ng-switch-when="breakdown">
 					<div class="col-md-12">
 						<div class="row">
-							<span>breakdown</span>
+							<breakdown-partial></breakdown-partial>
 						</div>
 					</div>
 				</div>
