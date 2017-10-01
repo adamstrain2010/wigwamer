@@ -47,14 +47,14 @@
 </div>
 
 <!-- Modal -->
-	
-	
+
+
 
 <!--</div>-->
-	
-	<!--Reservation Modal-->
+
+<!--Reservation Modal-->
 <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> -->
-	
+
 <!-- </div>	 -->
 <!--MODALS-->
 <div class="modalBack">
@@ -81,37 +81,37 @@
 						<button class="btn modalButton" ng-click="setModal('history')">History</button>
 					</div>
 					<div class="col-md-2">
-						<button class="btn modalButton"  ng-click="checkIn(this.selectedReservation.idreservation)" data-dismiss="modal">Check In</button> 
+						<button class="btn modalButton" ng-click="getExtras(); setModal('specials')">Other Charges</button>
 					</div>
 					<div class="col-md-2 dropdown">
 						<button class="btn modalButton dropdown-toggle" type="button" data-toggle="dropdown">More..
-						<span class="caret"></span></button>
+							<span class="caret"></span></button>
 						<ul class="dropdown-menu">
-						  <!-- <li><a href ng-click="cancel(this.selectedReservation.idreservation)" data-dismiss="modal">Cancel..</a></li> -->
-						  <li><a href ng-click="cancelQuestion()" data-dismiss="modal">Cancel..</a></li>
-						  <li><a href ng-click="setModal('notes')">Notes..</a></li>
-						  <li><a href ng-click="setModal('events')">Events..</a></li>
-						  <li><a href ng-click="testModal()">Test Modal</a></li>
+							<!-- <li><a href ng-click="cancel(this.selectedReservation.idreservation)" data-dismiss="modal">Cancel..</a></li> -->
+							<li><a href ng-click="cancelQuestion()" data-dismiss="modal">Cancel..</a></li>
+							<li><a href ng-click="setModal('notes')">Notes..</a></li>
+							<li><a href ng-click="setModal('events')">Events..</a></li>
+							<li><a href ng-click="testModal()">Test Modal</a></li>
 						</ul>
 					</div>
 				</div>
 			</div>
 			<div class="modal-body" ng-switch="modalContextOpen">
 				<div class="row" ng-switch-when="reservation">
-					<div class="col-md-12">	
+					<div class="col-md-12">
 						<div class="row">
 							<form name="resForm">
 								<div class="col-md-3">
 									<div class="form-group">
 										<label>Reservation Num:</label>
 										<input type="text" ng-model="selectedReservation.idreservation" name="resId" disabled class="modalInput form-control">
-									</div> 
-									<div class="form-group">	
+									</div>
+									<div class="form-group">
 										<label>Surname:</label>
 										<input type="text" ng-model="selectedReservation.surname" name="surname"  class="modalInput form-control">
 									</div>
 									<div class="form-group">
-										<label>Forename</label>	
+										<label>Forename</label>
 										<input type="text" ng-model="selectedReservation.forename" name="forename" class="modalInput form-control">
 									</div>
 								</div>
@@ -148,34 +148,36 @@
 					</div>
 				</div>
 				<div class="row" ng-switch-when="posting">
-					<div class="col-md-12">	
+					<div class="col-md-12">
 						<div class="row">
 							<span>posting</span>
 						</div>
 					</div>
 				</div>
 				<div class="row" ng-switch-when="breakdown">
-					<div class="col-md-12">	
+					<div class="col-md-12">
 						<div class="row">
 							<span>breakdown</span>
 						</div>
 					</div>
 				</div>
 				<div class="row" ng-switch-when="history">
-					<div class="col-md-12">	
+					<div class="col-md-12">
 						<div class="row">
 							<span><a href ng-click"testModal">history</a></span>
 						</div>
 					</div>
 				</div>
-				
+				<div class="row" ng-switch-when="specials">
+					<extras-form></extras-form>
+				</div>
 				<div class="row" ng-switch-when="notes">
 					<div layout="column" class="md-inline-form">
 						<md-content layout-gt-sm="row" style="background-color: transparent">
-								<md-input-container style="width:100%">
-									<label>Reservation Notes</label>
-									<textarea max-rows="10"></textarea>
-								</md-input-container>
+							<md-input-container style="width:100%">
+								<label>Reservation Notes</label>
+								<textarea max-rows="10"></textarea>
+							</md-input-container>
 						</md-content>
 					</div>
 					<div layout="column" class="md-inline-form">
@@ -194,25 +196,30 @@
 							</md-input-container>
 						</md-content>
 					</div>
+					<div class="pull-right">
+						<button class="btn btn-default">Save Notes</button>
+					</div>
 				</div>
-			
 				<div class="row" ng-switch-when="events">
-					<div class="col-md-12">	
+					<div class="col-md-12">
 						<div class="row">
 							<span>events</span>
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="modal-footer">
+					<div class="pull-left">
+						<button class="btn modalButton"  ng-click="checkIn(this.selectedReservation.idreservation)" data-dismiss="modal">Check In</button>
+					</div>
 					<button type="button" class="btn btn-default choiceButtons" ng-click="saveReservation()">Save</button>
 					<button type="button" class="btn btn-default btnNegative choiceButtons closeBtn" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	
+
+
 	<div class="messageModal modalBox modal-small" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modalContent">
 			<div class="modalHeader modal-header-primary">
@@ -229,12 +236,12 @@
 				</div>
 			</div>
 			<div class="modalFooter">
-				
+
 				<button type="button" class="btn btn-default choiceButtons closeBtn">OK</button>
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="decisionModal modalBox modal-small" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modalContent">
 			<div class="modalHeader modal-header-primary">
