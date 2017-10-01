@@ -1,0 +1,189 @@
+<form id="newResForm">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="row">
+				<div class="panel panel-default col-md-12 col-sm-1 panelNoPadding expandable">
+					<div class="panel-heading headingWhite">
+						<h5 class="titleHead">Guest</h5>
+						<button class="btn btn-warning pull-right white" type="button">Scan ID</button>
+					</div>	
+					<div class="panel-body">
+						<div class="form-group">
+							<label>Surname</label>
+							<input type="text" class="form-control" ng-model="surname" id="surnameInput">
+						</div>
+						<div class="form-group">
+							<label>Forename</label>
+							<input type="text" class="form-control" ng-model="forename">
+						</div>	
+						<div class="expander" ng-show="expanded">
+							<div class="form-group">
+								<label>ID</label>
+								<input type="text" class="form-control" ng-model="id">
+							</div>
+							<div class="form-group">
+								<label>Nationality</label>
+								<select class="form-control" ng-model="nationality" ng-options="country.countryname for country in nationalities">
+								<option selected value="">TBC</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-default pull-right" ng-click="expanded = !expanded">More..</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="row">
+				<div class="panel panel-default col-md-12 col-sm-1 panelNoPadding expandable">
+					<div class="panel-heading headingWhite">
+						<h5 class="titleHead">Stay Details</h5>
+					</div>	
+					<div class="panel-body">
+						<div class="form-group" id="whatever"> 
+							<!-- Date input -->
+							<label class="control-label" for="date">Arriving</label><br>
+							<md-datepicker ng-model="arrivalDate" id="arrival" name="arrivingDate" class="" ></md-datepicker>
+						</div>
+						<div class="form-group"> 
+							<!-- Date input -->
+							<label class="control-label" for="date">Departing</label><br>
+							<!-- <input class="form-control" id="departure" name="departingDate" placeholder="DD/MM/YYYY" type="text" ng-model="departureDate" /> -->
+							<md-datepicker ng-model="departureDate" id="departure" name="departingDate"></md-datepicker>
+						</div>
+						<div class="expander" ng-show="expanded">
+							<div class="form-group">
+								<label>Other Control</label>
+								<input type="text" class="form-control" ng-model="other">
+							</div>
+							<div class="form-group">
+								<label>Other Select</label>
+								<select class="form-control">
+									<option>American</option>
+									<option>Australian</option>
+									<option>British</option>
+									<option>Irish</option>
+									<option>New Zealand</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-default pull-right" ng-click="expanded = !expanded">More..</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="row">
+				<div class="panel panel-default col-md-12 col-sm-1 panelNoPadding expandable">
+					<div class="panel-heading headingWhite">
+						<h5 class="titleHead">Accommodation</h5>
+					</div>	
+					<div class="panel-body">
+						<div class="form-group">
+							<label>Room Type</label>
+							<select class="form-control" ng-model="selectedUnitType" ng-options="roomtype.unittypedesc for roomtype in roomTypes" ng-change="selectUnitType(selectedUnitType.idunittype)">
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Room</label>
+							<select class="form-control" ng-model="selectedUnit" ng-options="room.unitdescription for room in rooms">
+								<option selected disabled>Select a room type first</option>
+							</select>
+						</div>
+						<div class="expander" ng-show="expanded">
+							<div class="form-group">
+								<label>Mutiple Rooms</label>
+								<button class="form-control btn btnDark">Select</button>
+							</div>
+							<div class="form-group">
+								<label>Nationality</label>
+								<select class="form-control">
+									<option>American</option>
+									<option>Australian</option>
+									<option>British</option>
+									<option>Irish</option>
+									<option>New Zealand</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-default pull-right" ng-click="expanded = !expanded">More..</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>	
+<div class="row">
+	<div class="col-md-12 panel panel-default panelNoPadding">
+		<div class="panel-heading headingWhite">
+			<h5 class="titleHead">Admin</h5>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-group">
+						<label>Booking Source</label>
+							<select class="form-control" ng-model="bookingsSource">
+								<option value="1">Booking.com</option>
+								<option value="2">AirBnB</option>
+								<option value="3">Expedia</option>
+								<option value="4">Hostelworld</option>
+							</select>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label>Booking Channel</label>
+							<select class="form-control">
+								<option>OTA</option>
+								<option>Phone</option>
+								<option>Walk In</option>
+								<option>Email</option>
+								<option>Website</option>
+							</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+<div class="row">
+	<div class="col-md-10">
+	</div>
+	<div class="col-md-1">
+		<button class="btn btn-default choiceButtons" ng-click="save()">Save</button>
+	</div>
+	<div class="col-md-1">
+		<button class="btn btn-default btnNegative choiceButtons" ng-click="clearForm()">Clear</button>
+	</div>
+</div>
+
+
+<div class="modalBack">
+	<div class="messageModal modal-small" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modalContent">
+			<div class="modalHeader modal-header-primary">
+				<div class="row">
+					<div class="col-md-12 padBottom15 noSidePad">
+						<button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span class="white" aria-hidden="true">&times;</span></button>
+						<h5 class="modal-title white" id="myModalLabel"><span style="font-size: 1.2em"><i class='fa fa-check' aria-hidden='true'></i></span> {{message.title }}</h4>
+					</div>
+				</div>
+			</div>
+			<div class="modalBody">
+				<div class="row">
+					{{ message.body }}
+				</div>
+			</div>
+			<div class="modalFooter">
+				<button type="button" class="btn btn-default choiceButtons closeBtn" id="modalButton" ng-click="goToArrivals()">OK</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,47 @@
+<div class="row">
+	<div id="container">
+		<div class="row">
+        		<div class="col-md-12">
+				<div class="row display-flex">
+					<div class="col-md-12 col-sm-12 img-holder">
+						<img src="../img/wigwamerLogoOffset.png" />
+					</div>
+					<div class="col-md-12 col-sm-12 form-holder">
+						<form class="vcentered-form">
+							<div class="row">
+								<div class="col-md-6">
+									<h2 class="call-to-action">Sign in</h2>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<input class="form-control marg-top-10 beautified" type="text" placeholder="Property" ng-model="property" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<input class="form-control marg-top-10 beautified" type="text" placeholder="User" ng-model="user" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<input class="form-control marg-top-10 beautified" type="password" placeholder="Password" ng-model="password" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<button type="submit" class="btn btn-warning marg-top-10" ng-click="validateUser()">Login</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3 alert alert-red fade-in" style="opacity: 0" id="messageContainer">
+					<span id="warningMessage"></span>
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>

@@ -1,0 +1,333 @@
+body{
+	overflow: -moz-overflow-vertical;
+	overflow: scroll;
+}
+
+.dropdown:hover .dropdown-menu{
+	display: block;
+}
+
+input.beautified{
+	padding: 3px 9px !important;
+	background-color: white;
+	border-radius: 5px !important;
+}
+
+.fadedOrange{
+	color:rgba(255, 152, 0,0.6);
+}
+
+.fadedBlack{
+	color:rgba(0,0,0,0.4);
+}
+
+.fullPageTable{
+	width: 95%;
+	margin: 0 auto;
+	table-layout: fixed;
+}
+
+table{
+	table-layout: fixed;
+}
+
+tbody>tr>td, tbody>tr>th, thead>tr>th{
+	text-align: center;
+	vertical-align: middle !important;	
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.full>tbody>tr>th{
+	background-color:#FF9800;
+	color: white;
+}
+
+.full>tbody>tr>th>a{
+       	color:white;
+}
+
+tbody>tr>th>a:hover, tbody>tr>th>a:focus {
+        text-decoration: none;
+	color:#ff9800;	
+}
+
+.noFingerLink{
+	cursor: default;
+}
+
+modal-dialog{
+	width: 80%;
+}
+
+.modal-header-primary{
+	background-color: #FF9800;
+	color: white;
+}
+
+.white{
+	color: white;
+}
+
+.modalInput{
+	text-align: center;
+}
+
+.sidePadded{
+	width: 95%;
+	margin: 0 auto;
+}
+
+#headerNoPad{
+	padding: 0;
+}
+
+#contextBox{
+	background-color: orange;
+	padding: 5px 10px;
+	margin: 0 auto;
+	border-radius: 5px;
+}
+
+#innerContext{
+	overflow-y: hidden;
+	white-space: nowrap;
+	text-align: center;
+	color: white;
+}
+
+.contextLink{
+	color: white;
+	text-transform: uppercase;
+}
+
+.contextLink:hover{
+	text-decoration: none;
+}
+
+#myModalLabel{
+	padding: 0 15px;
+}
+
+#modalHeaderButtons{
+	padding: 10px 0;
+	background-color: white;
+}
+
+.modalButton{
+	background-color: #FF9800;
+	color: white;
+}
+
+.padBottom15{
+	padding-bottom: 15px;
+}
+
+.choiceButtons{
+	width: 100px;
+}
+
+.modalFullHeight{
+	height: 90%;
+}
+
+.btnNegative{
+	color: red !important;
+}
+
+input[type=text].modalInput, .modal-title{
+	text-transform: capitalize;
+}
+
+tr:hover:not(.headerRow), .table-striped > tbody > tr:nth-of-type(odd):not(.headerRow):hover{
+	background-color: rgba(255,165,0,0.1);
+}
+
+.fullScreenModal{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #FF9800;
+	left: 0;
+	top:0;
+}
+
+#mainSearchInput{
+	width: 50%;
+	font-size: 3em;
+	background-color: transparent;
+	border: 6px solid white;
+	color: white;
+	margin-top: 20px;
+	border-radius: 5px;
+	text-transform: uppercase;
+	text-align: center;
+	font-weight: bold;
+}
+
+#mainSearchInput:focus{
+	box-shadow: none;
+	outline: none;
+}
+
+input::-webkit-input-placeholder{
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.searchResult{
+	width: 50%;
+    font-size: 3em;
+    background-color: transparent;
+    border: 6px solid white;
+    color: white;
+    margin-top: 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+}
+
+.resultRow{
+	text-align: center;
+	font-size: 1.6em;
+	padding-top: 10px;
+	color: rgb(255, 204, 128);
+}
+
+.resultRow:nth-child(odd){
+	background-color: #dc8503;
+}
+
+.noSidePadding{
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+.resultRow:hover{
+	color: white;
+	cursor: pointer;
+}
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.panelNoPadding{
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.headingWhite>h5{
+	color: #FF9800;
+}
+
+.titleHead{
+	display: inline-block;
+}
+
+.btnDark{
+	background-color: #cc7a00;
+}
+
+.dateContainer{
+	display: flex;
+	height: 100%;
+	flex-flow: column;
+}
+
+.modalContent{
+	height: 100%;
+}
+
+.bSource{
+	text-transform: uppercase;
+	cursor: default;
+}
+
+.modal-small{
+	position: relative;
+	background-color: #FF9800;
+	color: white;
+	width: 500px;
+	margin: 0 auto;
+	padding: 20px;
+	height: 200px;
+	top: calc(50% - 200px);
+	display: none;
+}
+
+.modal-small>.modalContent>.modalHeader{
+	height: 50px;
+	padding: 0;
+}
+
+.modal-small>.modalContent>.modalHeader>h5{
+	padding: 0;
+}
+
+.modal-small>.modalContent>.modalBody{
+	height: 80px;
+}
+
+.modal-small>.modalContent>.modalFooter{
+	height: 50px;
+	float: right;
+}
+
+.modalBack{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.3);
+	display: none;
+	overflow: scroll;
+}
+
+.noSidePad, .noSidePad>h5{
+	padding: 0;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+.dayCell{
+	user-select: none;
+	cursor: crosshair;
+}
+
+.loader{
+	font-size: 10em !important;
+	color: rgba(255, 152, 0, 0.5);
+	margin-top: 50px;
+}
+
+.fullWidthDatepicker{
+	width: calc(100% - 40px)
+}
+
+md-dialog{
+	opacity: 1 !important;
+}
+
+.red{
+	color: red;
+	font-weight: bold;
+}
+
+.hoop{
+	display: block;
+	height: 30px;
+	width: 30px;
+	line-height: 30px;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	background-color: RED;
+	color: white;
+	text-align: center;
+	font-size: 1em;
+	margin: 0 auto;
+	color: white;
+}

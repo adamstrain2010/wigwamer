@@ -1,0 +1,32 @@
+<div class="container fullScreenModal" esc-key="searchClose()">
+		<div class="row">
+			<div class="row">
+				<div class="col-md-12">
+					<span style="float: right; color:white; font-size: 4em; font-weight: bold; margin-top: 20px; margin-right: 10px;" class="close" ng-click="searchClose()">X</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 text-center">
+						<input type="text" id="mainSearchInput" placeholder="search.." ng-model="searchTerm" ng-change="quickSearch(searchTerm)" ng-blur="doSearch(searchTerm)" search-key>
+						<input type="checkbox">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 noSidePadding">
+					<div class="row">
+						<div class="col-md-12 noSidePadding">
+							<div class="row resultRow" ng-repeat="searchedRes in searchedResers">
+								<div class="col-md-12 noSidePadding">
+									Reservation Number: {{searchedRes.idreservation}} | Reservation Name: {{searchedRes.reservationname}} | Arrival Date: {{searchedRes.fromdate}} | Reservation Status: {{searchedRes.idreservationstatus}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-10">
+		</div>
+	</div>

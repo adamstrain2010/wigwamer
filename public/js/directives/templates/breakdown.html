@@ -1,0 +1,18 @@
+<div>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <th>Charge Date</th>
+            <th>Description</th>
+            <th>Value</th>
+            <th>Void</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="chargeRow in chargeRows">
+                <td>{{chargeRow.chargedate}}</td>
+                <td>{{chargeRow.transactiondescription}}</td>
+                <td>{{chargeRow.gross}}</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
