@@ -64,8 +64,8 @@ app.factory("dashboard", function($http){
         return $http.get(apiUrl);
     };
     var insertextra = function(extra, idReservation){
-        var apiUrl = 'http://52.19.183.139:1234/api/insertExtra?clientId=' + extra.extraType.idclient + '&propertyId=1&extraId=' + extra.extraId +
-            '&reservationId=' + idReservation + '&chargeDate=2017-06-01&adultCharge=51.75';
+        var apiUrl = 'http://52.19.183.139:1234/api/insertExtra?clientId=' + 1 + '&propertyId=1&extraId=' + extra.extraId +
+            '&reservationId=' + idReservation + '&chargeDate=2017-06-01&adultCharge=5.00';
         return $http.post(apiUrl);
     };
     var getreservationextras = function(idReservation){
@@ -74,6 +74,35 @@ app.factory("dashboard", function($http){
     };
     var getcharges = function(idReservation){
         var apiUrl = "http://52.19.183.139:1234/api/getCharges?idReservation=" + idReservation;
+        return $http.post(apiUrl);
+    };
+    var gettransactions = function(idReservation){
+        var apiUrl = "http://52.19.183.139:1234/api/getTransactions?reservationId=" + idReservation;
+        return $http.get(apiUrl);
+    };
+    var gettransactioncodes = function(clientId){
+        var apiUrl = "http://52.19.183.139:1234/api/getTransactionCodes?clientId=" + clientId;
+        console.log(apiUrl);
+        return $http.get(apiUrl);
+    };
+    var getbalancetopay = function(idReservation){
+        var apiUrl = "http://52.19.183.139:1234/api/getBalanceToPay?reservationId=" + idReservation;
+        console.log(apiUrl);
+        return $http.get(apiUrl);
+    };
+    var insertposting = function(idReservation, idTransCode, transValue, transTaxValue){
+        var apiUrl = "http://52.19.183.139:1234/api/insertPosting?reservationId=" + idReservation + "&transcodeId=" + idTransCode + "&value=" + transValue + "&tax=" + transTaxValue;
+        console.log(apiUrl);
+        return $http.get(apiUrl);
+    };
+    var getpostings = function(idReservation){
+        var apiUrl = "http://52.19.183.139:1234/api/getPostings?reservationId=" + idReservation;
+        console.log(apiUrl);
+        return $http.get(apiUrl);
+    };
+    var voidtransaction = function(idTransaction){
+        var apiUrl = "http://52.19.183.139:1234/api/voidTransaction?transId=" + idTransaction;
+        console.log(apiUrl);
         return $http.post(apiUrl);
     };
     return{
@@ -93,7 +122,13 @@ app.factory("dashboard", function($http){
         getAllSpecials: getallspecials,
         insertExtra: insertextra,
         getReservationExtras: getreservationextras,
-        getChargeBreakdown: getcharges
+        getChargeBreakdown: getcharges,
+        getTransactions: gettransactions,
+        getTransactionCodes: gettransactioncodes,
+        getBalanceToPay: getbalancetopay,
+        insertPosting: insertposting,
+        getPostings: getpostings,
+        voidTransaction: voidtransaction
     }
 });
 

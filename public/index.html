@@ -21,6 +21,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="libs/angular/angular.min.js"></script>
 	<script src="libs/angular-route/angular-route.min.js"></script>
+	<script src="libs/jquery.stickytableheaders.min.js"></script>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/angular-ui-router/1.0.0-rc.1/angular-ui-router.min.js"></script>
 
@@ -52,6 +53,8 @@
 	<script src="js/directives/SearchDirective.js"></script>
 	<script src="js/directives/ExtrasDirective.js"></script>
 	<script src="js/directives/BreakdownDirective.js"></script>
+	<script src="js/directives/PostingDirective.js"></script>
+
 
 	<script src="js/controllers/LoginController.js"></script>
 	<script src="js/services/DashboardService.js"></script>
@@ -110,6 +113,7 @@
 			</div>
 		</div>
 	</div>
+	<div id="snackbar">Message</div>
 	<div ng-include="'views/partials/searchModal.html'" ng-show="searchModal"></div>
 </div>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>

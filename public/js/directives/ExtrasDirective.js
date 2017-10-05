@@ -7,7 +7,7 @@ app.directive("extrasForm",function($compile, dashboard){
         '<div class="col-md-3">\n' +
         '    <div class="form-group">\n' +
         '    <label>Charge</label>\n' +
-        '    <select class="form-control" ng-model="chargeType" id="extrasSelect" ng-change="populateNext()" ng-options="extra as extra.extrasdescription for extra in extras">\n' +
+        '    <select class="form-control" ng-model="chargeType" id="extrasSelect" ng-change="populateNext();console.log(this);" ng-options="extra as extra.extrasdescription for extra in extras">\n' +
         '</select>\n' +
         '</div>\n' +
         '<div class="form-group">\n' +
@@ -26,7 +26,7 @@ app.directive("extrasForm",function($compile, dashboard){
         '        </div>\n' +
         '    <div ng-show="numRows == 0 && loaded" style="text-align: center"><h4>There are no Other Charges</h4></div>\n' +
         '    <div ng-show="numRows > 0 && loaded">' +
-        '    <table class="table table-striped table-bordered ng-scope" style="table-layout: fixed; width: 100%">\n' +
+        '    <table id="extrasTable" class="table table-striped table-bordered ng-scope" style="table-layout: fixed; width: 100%">\n' +
         '    <thead>' +
         '        <th>Charge</th>\n' +
         '        <th>Qty</th>\n' +
@@ -80,12 +80,17 @@ app.directive("extrasForm",function($compile, dashboard){
             var reservationId = scope.$parent.selectedReservation.idreservation;
             scope.numRows = scope.extraChargesToAdd.length;
             scope.addExtraChargeToList = function(){
-                var toAdd = {"extraId": scope.chargeType.idextras, "extraDesc": scope.chargeType.extrasdescription ,"extraType": scope.chargeType, "qty": scope.extrasQuantity, "unitPrice": "£" + (2.2).toFixed(2), "subTotal": "£" + (scope.extrasQuantity * 2.2).toFixed(2)};
-                scope.extraChargesToAdd.push(toAdd);
-                scope.numRows = scope.extraChargesToAdd.length;
-                scope.chargeType = "";
-                scope.extrasQuantity = "";
-                extrasSelect.focus();
+                if(scope.chargeType.idextras != null & scope.extrasQuantity != null){
+                    var toAdd = {"extraId": scope.chargeType.idextras, "extraDesc": scope.chargeType.extrasdescription ,"extraType": scope.chargeType, "qty": scope.extrasQuantity, "unitPrice": "£" + (5.00).toFixed(2), "subTotal": "£" + (scope.extrasQuantity * 5).toFixed(2)};
+                    scope.extraChargesToAdd.push(toAdd);
+                    scope.numRows = scope.extraChargesToAdd.length;
+                    scope.chargeType = "";
+                    scope.extrasQuantity = "";
+                    extrasSelect.focus();
+                }
+                else{
+                    return;
+                }
             };
             scope.removeRow  = function(array, index){
                 array.splice(index, 1);
@@ -111,6 +116,7 @@ app.directive("extrasForm",function($compile, dashboard){
                 dashboard.getReservationExtras(reservationId)
                 .then(function(result){
                     scope.extraChargesToAdd = result.data.recordset;
+                    scope.extraChargesToAdd.forEach(function(r){r.unitPrice = "£" + r.unitPrice.toFixed(2); r.subTotal = "£" + r.subTotal.toFixed(2)});
                     scope.numRows = scope.extraChargesToAdd.length;
                     scope.loaded = true;
                 })
@@ -121,6 +127,7 @@ app.directive("extrasForm",function($compile, dashboard){
                     console.log(err);
                 });
             }
+
 
             scope.getExtrasForReservation();
         }

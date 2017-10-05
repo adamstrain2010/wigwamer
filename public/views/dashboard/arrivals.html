@@ -21,12 +21,14 @@
 		<td>{{ reservation.reservationname }}</td>
 		<td>{{ reservation.fromdate }}</td>
 		<td>{{ reservation.todate }}</td>
-		<td>{{reservation.reservationsourcecode | uppercase}}-1234567</td>
+		<td>{{ reservation.reservationsourcecode | uppercase}}-1234567</td>
 		<td><span data-toggle="tooltip" title="{{reservation.reservationsourcedescription}}" class="bSource" style="background-color: {{reservation.reservationcolour}}; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold">{{ reservation.reservationsourcecode }}</span></td>
-		<td>£76.00</td>
+		<td>£{{ reservation.toPay }}</td>
 		<td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal"><i class="fa fa-address-book-o" aria-hidden="true"></i></button></td>
 	</tr>
 </table>
+
+<button ng-click="showSnackTest()">test</button>
 <div ng-show="loaded && tester">
 	<div class="row">
 		<div class="col-md-4">
@@ -58,13 +60,14 @@
 <!-- </div>	 -->
 <!--MODALS-->
 <div class="modalBack">
-	<div class="modal-dialog modal-lg modalFullHeight modalBox" role="document">
+	<div class="modal-dialog modal-lg modalFullHeight modalBox" role="document" esc-key="testing()">
 		<div class="modal-content">
 			<div class="modal-header modal-header-primary">
 				<div class="row">
 					<div class="col-md-12 padBottom15">
 						<button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span class="white" aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title white" id="myModalLabel">{{ selectedReservation.reservationname }}</h4>
+						<h4 class="modal-title white" id="myModalLabel">{{ selectedReservation.reservationname }} ({{ selectedReservation.idreservation }}) <span class="toPay">To Pay: £ {{balToPay}}</span></h4>
+
 					</div>
 				</div>
 				<div class="row" id="modalHeaderButtons" style="text-align: center">
@@ -150,7 +153,7 @@
 				<div class="row" ng-switch-when="posting">
 					<div class="col-md-12">
 						<div class="row">
-							<span>posting</span>
+							<posting-partial></posting-partial>
 						</div>
 					</div>
 				</div>
@@ -210,10 +213,9 @@
 
 				<div class="modal-footer">
 					<div class="pull-left">
-						<button class="btn modalButton"  ng-click="checkIn(this.selectedReservation.idreservation)" data-dismiss="modal">Check In</button>
+						<button class="btn modalButton"  ng-click="balanceQuestion()" data-dismiss="modal">Check In</button>
 					</div>
-					<button type="button" class="btn btn-default choiceButtons" ng-click="saveReservation()">Save</button>
-					<button type="button" class="btn btn-default btnNegative choiceButtons closeBtn" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-default btnNegative choiceButtons closeBtn" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>

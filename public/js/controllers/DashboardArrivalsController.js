@@ -1,12 +1,32 @@
 
 //ARRIVALS CONTROLLER
 app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  helpers, reservation, dashboard,appService, $animate, $mdDialog, $mdToast){
-
     //JUST FOR DEV
     //DELETE AFTERWARDS
 
+
     $scope.tester = false;
 
+    $scope.showSnack = function(){
+        appService.showSnackBar($rootScope.message);
+    };
+
+    $scope.showSnackTest = function(){
+        $rootScope.message = "This is how a message will look.";
+        appService.showSnackBar($rootScope.message);
+    };
+
+    if($rootScope.messageToShow == true){
+        $scope.showSnack();
+        $rootScope.messageToShow = false;
+    };
+
+
+
+
+    $scope.testing = function(){
+        console.log("adam");
+    }
 
     appService.getSystemDate()
         .then(function(result){
@@ -62,18 +82,39 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
         });
     }
 
-    $scope.checkInMessage = function() {
-        alert = $mdDialog.alert({
-            title: 'Check In',
-            textContent: 'The reservation is now checked in. The key can be handed to the guest.',
-            ok: 'Close'
-        });
+    $scope.balanceQuestion = function(ev){
+        dashboard.getBalanceToPay($scope.selectedReservation.idreservation)
+            .then(function(result){
+                var balance = (result.data[0][0][0].balanceToPay).toFixed(2);
+                if(balance > 0){
+                    var confirm = $mdDialog.confirm()
+                        .title('Check In')
+                        .textContent('Are you sure you want to check in this reservation? It still has an unsettled balance of £' + balance + '.')
+                        .ariaLabel('Are you sure you want to check in this reservation? It still has an unsettled balance.')
+                        .targetEvent(ev)
+                        .cancel('No')
+                        .ok('Yes')
+                    $(".modalBack").css("display", "none");
+                    $mdDialog.show(confirm).then(function() {
+                        $scope.checkIn($scope.selectedReservation.idreservation);
+                        //$scope.checkIn();
+                    }, function() {
+                        $(".modalBack").css("display", "block");
+                    });
+                }
+                else{
+                    $scope.checkIn($scope.selectedReservation.idreservation);
+                }
+            })
+            .catch(function(err){
+                console.log(err);
+            })
 
-        $mdDialog
-            .show( alert )
-            .finally(function() {
-                alert = undefined;
-            });
+    }
+
+    $scope.checkInMessage = function() {
+        $rootScope.message = "The guest is now checked in. You may hand the key to the guest";
+        $scope.showSnack();
     }
 
     // $scope.cancel = function(resNum){
@@ -105,16 +146,14 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
                 dashboard.getReservations($scope.systemDate)
                     .then(function(response){
                         $scope.loaded = false;
-                        $scope.reservations = response.data.recordset;
+                        $scope.reservations = response.data[0][0];;
                         $scope.numReservations = $scope.reservations.length;
                         $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
                         $scope.loaded = true;
                     })
                     .then(function(){
-                        $scope.message = {"title": "Cancelled", "body": "Reservation #" + resNum + " has been cancelled."};
-                        $(".decisionModal").css("display","none");
-                        //$(".messageModal").css("display","block");
-                        $scope.showSimpleToast();
+                        $rootScope.message = "Reservarvation #" + resNum + " has been cancelled.";
+                        $scope.showSnack();
                     })
             })
     }
@@ -126,6 +165,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 
     $scope.loaded = false;
     $('.closeBtn').click(function(){
+        getReservations($rootScope.globalSystemDate);
         console.log("closing");
         $(".modalBack").css("display", "none");
         $scope.setModal('reservation');
@@ -163,7 +203,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
                 dashboard.getReservations($scope.systemDate)
                     .then(function(response){
                         $scope.loaded = false;
-                        $scope.reservations = response.data.recordset;
+                        $scope.reservations = response.data[0][0];
                         $scope.numReservations = $scope.reservations.length;
                         $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
                         $(".modalFullHeight").css("display", "none");
@@ -242,9 +282,11 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
     function getReservations(arrivalDate){
         dashboard.getReservations($scope.systemDate)
             .then(function(response){
-                $scope.reservations = response.data.recordset;
+                console.log(response.data[0][0]);
+                $scope.reservations = response.data[0][0];
                 $scope.numReservations = $scope.reservations.length;
                 $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
+                $scope.reservations.forEach(function(r){ r.toPay = r.toPay.toFixed(2)});
                 $scope.loaded = true;
             });
     }
@@ -265,6 +307,9 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
                 $scope.selectedReservation.departureDate = moment($scope.selectedReservation.todate).toDate();
                 $(".modalFullHeight").css("display", "block");
                 $('.modalBack').css("display", "block");
+            })
+            .then(function(){
+                $scope.getBalanceToPay(reservationNum.reservation.idreservation);
             })
             .catch(function(err){
                 console.log(err);
@@ -296,7 +341,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
     $scope.add500Reservations = function(callback){
         for(var i = 0; i < $scope.newResN; i++){
             var ranNum = Math.floor(Math.random()*4) + 1
-            dashboard.createReservation("Strain", "Adam", $scope.systemDate, $scope.systemDate, ranNum, 1)
+            dashboard.createReservation("Strain", "Adam", $scope.systemDate, $rootScope.globalSystemDate.add("days",1).format("YYYY-MM-DD"), ranNum, 1,1,1)
                 .catch(function(err){
                     console.log(err);
                 });
@@ -349,6 +394,16 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
         // $scope.extraChargesToAdd.push(toAdd);
         // console.log($scope.addExtraChargeToAdd);
     }
+
+    $rootScope.getBalanceToPay = function(idReservation){
+        dashboard.getBalanceToPay(idReservation)
+        .then(function(result){
+            $rootScope.balToPay = (result.data[0][0][0].balanceToPay).toFixed(2);
+        })
+        .catch(function(err){
+            console.log(err);
+        })
+    };
 
 }).config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function (date) {

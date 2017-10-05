@@ -11,10 +11,17 @@ app.factory("appService", function($http){
 		console.log("HERE");
 		var apiUrl = 'http://52.19.183.139:1234/api/getAllNationalities';
 		return $http.get(apiUrl);
-	}
+	};
+    function showsnackbar(message) {
+        var x = document.getElementById("snackbar")
+		x.innerHTML = message;
+        setTimeout(function(){ x.className = "show"; }, 500);
+		setTimeout(function(){ x.className = x.className.replace("show", ""); }, 4000);
+	};
 	return{
 		getSystemDate: getsystemdate,
 		getRoomTypes: getroomtypes,
-		getAllNationalities: getallnationalities
+		getAllNationalities: getallnationalities,
+		showSnackBar: showsnackbar
 	}
 });

@@ -1,4 +1,4 @@
-app.controller("NewReservationController", function($scope,$rootScope, $http, dashboard, $location,appService){
+app.controller("NewReservationController", function($scope,$rootScope, $http, dashboard, $location,appService, availability){
 	appService.getSystemDate()
 	.then(function(result){
 		$rootScope.globalSystemDate = moment(result.data.recordset[0].systemdate).format("Do MMMM YYYY");
@@ -8,7 +8,7 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 		appService.getRoomTypes(1)
 		.then(function(data){
 			$scope.roomTypes = data.data.recordset;
-			console.log($scope.roomTypes);
+            console.log($scope.roomTypes);
 		})
 		.then(function(data){
 			if($rootScope.newResFlag){
@@ -40,9 +40,51 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 	})
 	.catch(function(err){
 		console.log(err);
-	});	
-	
-	
+	});
+
+
+	//FUNCTION TO RETURN ONLY ROOMTYPES THAT AREA AVAILABLE FOR WHOLE DATE RANGE - NOT SOME OF THE DATE RANGE
+	$scope.checkAvailByRange = function(){
+		var fromDate = moment($scope.arrivalDate).format("YYYY-MM-DD");
+        var toDate = moment($scope.departureDate).format("YYYY-MM-DD");
+        var numDays = moment(toDate).diff(moment(fromDate), 'days');
+        availability.getAvailabilityByRange(1, 1, 1, -1, fromDate, toDate)
+			.then(function(result){
+                $scope.availRows = result.data[0][0];
+                $scope.availRows.forEach(function(r){ r.configdate = moment(r.configdate).format("DD/MM/YY")});
+                $scope.availRows.forEach(function(r){ r.rate = "£" + r.rate.toFixed(2)});
+                $scope.availRows = $scope.availRows.chunk(numDays);
+                $scope.availRows.forEach(function(r){ r.forEach(function(innerR){
+                	if(innerR.unitsavailable == 0){
+						var index = $scope.availRows.indexOf(r);
+							if(index > 1){
+								$scope.availRows.splice(index, 1);
+							}
+                		}}
+                	)
+                });
+			})
+			.then(function(){
+				$scope.tester = $scope.availRows;
+				$scope.roomTypes = [];
+				$scope.tester.forEach(function(r){
+					var thisRT = {"unittypedesc": r[0].unittypedesc, "idunitype": r[0].idunitype};
+					$scope.roomTypes.push(thisRT);
+				})
+				console.log($scope.availRows);
+                return $scope.availRows;
+			})
+			.catch(function(err){
+				console.log(err);
+			})
+	};
+
+	// $scope.updateSelections = async function(){
+	// 	let out;
+	// 	out = await $scope.checkAvailByRange();
+	// 	console.log(out);
+	// };
+
 	function fillNationalities(){
 		appService.getAllNationalities()
 		.then(function(result){
@@ -52,11 +94,11 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 			console.log(err);
 		});
 	};
-	
-	
+
+
 	$("#surnameInput").focus();
 	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
-	
+
 	$scope.save = function(){
 		console.log($scope.selectedUnitType.idunittype);
 		$rootScope.newResFlag = false;
@@ -69,10 +111,11 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 		if($scope.nationality == null){
 			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, 900, $scope.selectedUnitType.idunittype)
 			.then(function(result){
-				$scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
-				$(".messageModal").css("display", "block");
-				$(".modalBack").css("display","block");
-				$("#modalButton").focus();
+                $scope.goToArrivals();
+				// $scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
+				// $(".messageModal").css("display", "block");
+				// $(".modalBack").css("display","block");
+				// $("#modalButton").focus();
 			})
 			.catch(function(err){
 				console.log(err);
@@ -92,8 +135,10 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 
 		}
 	};
-	
+
 	$scope.goToArrivals = function(){
+        $rootScope.messageToShow = true;
+		$rootScope.message = "New reservation made.";
 		$location.path('/dashboard/arrivals');
 	}
 	
