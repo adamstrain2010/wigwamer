@@ -1,3 +1,5 @@
+var element;
+
 app.controller("NewReservationController", function($scope,$rootScope, $http, dashboard, $location,appService, availability){
 	appService.getSystemDate()
 	.then(function(result){
@@ -17,12 +19,14 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 				console.log($rootScope.newResFlag);
 				$scope.arrivalDate = moment($rootScope.startDate, "DD/MM/YYYY").toDate();
 				$scope.departureDate = moment($rootScope.endDate, "DD/MM/YYYY").toDate();
+                $scope.checkAvailByRange();
 			}
 			else{
 				console.log($rootScope.newResFlag);
 				console.log($scope.systemDate);
 				$scope.arrivalDate = $scope.systemDate.toDate();
 				$scope.departureDate = $scope.systemDate.add(1, 'days').toDate();
+                $scope.checkAvailByRange();
 			}
 		})
 		.then(function(){
@@ -55,7 +59,7 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
                 $scope.availRows.forEach(function(r){ r.rate = "£" + r.rate.toFixed(2)});
                 $scope.availRows = $scope.availRows.chunk(numDays);
                 $scope.availRows.forEach(function(r){ r.forEach(function(innerR){
-                	if(innerR.unitsavailable == 0){
+                	if(innerR.unitsavailable < 1){
 						var index = $scope.availRows.indexOf(r);
 							if(index > 1){
 								$scope.availRows.splice(index, 1);
@@ -68,10 +72,11 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 				$scope.tester = $scope.availRows;
 				$scope.roomTypes = [];
 				$scope.tester.forEach(function(r){
-					var thisRT = {"unittypedesc": r[0].unittypedesc, "idunitype": r[0].idunitype};
+					console.log(r);
+					var thisRT = {"unittypedesc": r[0].unittypedesc, "idunitype": r[0].idunittype};
 					$scope.roomTypes.push(thisRT);
 				})
-				console.log($scope.availRows);
+				console.log($scope.roomTypes);
                 return $scope.availRows;
 			})
 			.catch(function(err){
@@ -109,7 +114,8 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 		console.log(fromDate);
 		console.log(toDate);
 		if($scope.nationality == null){
-			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, 900, $scope.selectedUnitType.idunittype)
+			element = $scope.selectedUnitType.idunitype;
+			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, 900, element, 1)
 			.then(function(result){
                 $scope.goToArrivals();
 				// $scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};

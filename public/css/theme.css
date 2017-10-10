@@ -278,7 +278,7 @@ input::-webkit-input-placeholder{
 }
 
 .modalBack{
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	height: 100%;
 	left: 0;
@@ -398,4 +398,47 @@ md-dialog md-dialog-actions {
 
 md-dialog md-dialog-actions button {
 	float: right !important;
+}
+
+.edit-in-place span {
+	cursor: pointer;
+}
+
+.edit-in-place input {
+	display: none;
+}
+
+.edit-in-place.active span {
+	display: none;
+}
+
+.edit-in-place.active input {
+	display: inline-block;
+}
+
+#resTableModal{
+	width: 80%;
+	margin: 30px auto;
+}
+
+.modalPaginatorContainer{
+	float: right;
+}
+
+.modalPaginatorContainer>ul{
+	margin: 0;
+	padding: 0;
+	margin-right: 30px;
+}
+
+.md-datepicker-input-container{
+	width: 80% !important;
+}
+
+.darker{
+	color: #CC7A00;
+}
+
+.arrow{
+	cursor: default;
 }

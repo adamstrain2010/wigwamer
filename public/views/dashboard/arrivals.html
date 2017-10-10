@@ -11,9 +11,12 @@
 		<th style="width: 200px"><a class="noFingerLink" href="#" ng-click="sortType = 'reservationname'; sortReverse = !sortReverse;">Reservation Name<span ng-show="sortType == 'reservationname' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'reservationname' &&  sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-click="sortType = 'fromdate'; sortReverse = !sortReverse;">Arrival Date<span ng-show="sortType == 'fromdate' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'fromdate' &&sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-click="sortType = 'todate'; sortReverse = !sortReverse;">Departure Date<span ng-show="sortType == 'todate' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'todate' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
+		<th style="width: 175px"><a class="noFingerLink" href="#" ng-click="sortType = 'unittype'; sortReverse = !sortReverse;">Unit Type<span ng-show="sortType == 'sortType' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'unitType' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
+		<th style="width: 100px"><a class="noFingerLink" href="#" ng-click="sortType = 'unit'; sortReverse = !sortReverse;">Unit<span ng-show="sortType == 'sortType' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'unit' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-click="sortType = 'confnum'; sortReverse = !sortReverse;">Confirmation #<span ng-show="sortType == 'confnum' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'confnum' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-click="sortType = 'bookingsource'; sortReverse = !sortReverse;">Booking Source<span ng-show="sortType == 'bookingsource' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'bookingsource' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-type="sortType = 'balancetopay'; sortReverse = !sortReverse;">To Pay<span ng-show="sortType == 'balancetopay' && sortReverse == true" class="fa fa-caret-up ng-hide"></span><span ng-show="sortType == 'balancetopay' && sortReverse == true" class="fa fa-caret-up ng-hide"></a></th>
+		<th style="width: 125px"><a class="noFingerLink" href="#" ng-type="sortType = 'ratecode'; sortReverse = !sortReverse;">Rate Code<span ng-show="sortType == 'ratecode' && sortReverse == true" class="fa fa-caret-up ng-hide"></span><span ng-show="sortType == 'ratecode' && sortReverse == true" class="fa fa-caret-up ng-hide"></a></th>
 		<th><a href="#" class="noFingerLink">Details</a></th>
 	</tr>
 	<tr ng-repeat="reservation in reservations | orderBy:sortType:sortReverse">
@@ -21,9 +24,12 @@
 		<td>{{ reservation.reservationname }}</td>
 		<td>{{ reservation.fromdate }}</td>
 		<td>{{ reservation.todate }}</td>
+		<td>{{ reservation.unittypedesc }}</td>
+		<td>101</td>
 		<td>{{ reservation.reservationsourcecode | uppercase}}-1234567</td>
 		<td><span data-toggle="tooltip" title="{{reservation.reservationsourcedescription}}" class="bSource" style="background-color: {{reservation.reservationcolour}}; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold">{{ reservation.reservationsourcecode }}</span></td>
 		<td>£{{ reservation.toPay }}</td>
+		<td data-toggle="tooltip" title="{{reservation.ratecodedesc}}"><span class="arrow">{{ reservation.ratecode }}</span></td>
 		<td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal"><i class="fa fa-address-book-o" aria-hidden="true"></i></button></td>
 	</tr>
 </table>
@@ -133,13 +139,12 @@
 								<div class="col-md-3">
 									<div class="form-group">
 										<label>Room Type</label>
-										<select class="form-control" ng-model="nationality" ng-options="country.countryname for country in nationalities">
-											<option selected value="">TBC</option>
+										<select class="form-control" ng-model="selectedReservation.idunittype" ng-options="unit.idunittype as unit.unittypedesc  for unit in unitTypes" style="margin-top:4px">
 										</select>
 									</div>
 									<div class="form-group">
 										<label>Room</label>
-										<select class="form-control" ng-model="nationality" ng-options="country.countryname for country in nationalities">
+										<select class="form-control" ng-model="nationality" ng-options="country.countryname for country in nationalities" style="margin-top:4px">
 											<option selected value="">TBC</option>
 										</select>
 									</div>

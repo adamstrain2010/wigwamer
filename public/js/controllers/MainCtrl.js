@@ -1,4 +1,4 @@
-var app = angular.module('MainCtrl', ['ngAria', 'ngAnimate','ngMaterial', 'ui.router', 'ngCookies']);
+var app = angular.module('MainCtrl', ['ngAria', 'ngAnimate','ngMaterial', 'ui.router', 'ngCookies', 'ui.bootstrap.contextMenu', 'md.data.table','angularUtils.directives.dirPagination']);
 
 app.factory("reservation", function($http){
 	return {

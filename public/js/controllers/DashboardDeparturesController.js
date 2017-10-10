@@ -13,8 +13,15 @@ app.controller('DashboardDeparturesController',function($scope,$http,$rootScope,
 	.catch(function(err){
 		console.log(err);
 	});
-	
-	
+
+    $scope.query = {
+        order: 'name',
+        limit: 5,
+        page: 1
+    };
+
+	$scope.selectedItem = [];
+
 	$scope.loaded = false;
 	$scope.numReservations = null;
 	$scope.checkOut = function(resNum){

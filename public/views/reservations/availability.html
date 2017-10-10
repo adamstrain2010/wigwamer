@@ -2,26 +2,32 @@
 	<i class="fa fa-circle-o-notch fa-spin loader" aria-hidden="true"></i>
 </div>
 <div class="row" style="padding-bottom: 15px" ng-show="loaded">
-	<div class="col-md-2">
+	<div class="col-md-3" style="text-align: center">
 		<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="a" checked>Available</label>
 		<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="b">Booked</label>
 		<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="r">Rates</label>
 	</div>
 	<div class="col-md-2">
+		<div class="form-group" ng-show="availContext.type == 'r'">
+			<label>Rate Code</label>
+			<select class="form-control" ng-model="selectedReservation.idunittype" ng-options="" style="margin-top:4px">
+				<option>BAR</option>
+			</select>
+		</div>
 	</div>
-	<div class="col-md-2">
+	<div class="col-md-1">
 	</div>
 	<div class="col-md-1">
 	</div>
 	<div class="col-md-2">
 		<!-- Date input -->
 		<label class="control-label" for="date">From</label><br>
-		<md-datepicker ng-model="pickerFromDate" id="arrival" name="arrivingDate" class="" ></md-datepicker>
+		<md-datepicker ng-model="pickerFromDate" id="arrival" ng-change="changeFromDate()" name="arrivingDate" class="" ></md-datepicker>
 		<!-- Date input -->
 	</div>
 	<div class="col-md-2">
 		<label class="control-label" for="date">To</label><br>
-		<md-datepicker ng-model="pickerToDate" id="arrival" name="arrivingDate" class="" ></md-datepicker>
+		<md-datepicker ng-model="pickerToDate" id="arrival" ng-change="changeToDate()" name="arrivingDate" class="" ></md-datepicker>
 	</div>
 	<div class="col-md-1" style="text-align: center">
 		<label class="control-label" for="date"></label><br>
@@ -36,7 +42,11 @@
 	<tbody>
 		<tr ng-repeat="roomType in availRows">
 			<td style="text-align: left; font-weight: bold">{{roomType[0].unittypedesc}}</td>
-			<td ng-repeat="availRow in roomType" ng-class="{'red' :  {{availRow.unitsavailable}} < 0}" class="dayCell" data-date="{{availRow.configdate}}"><span ng-class="{'hoop' :  {{availRow.unitsavailable}} < 0}"><span ng-if="availContext.type == 'a'">{{availRow.unitsavailable}}</span></span><span ng-if="availContext.type == 'b'">{{availRow.unitbookedcount}}</span><span ng-if="availContext.type == 'r'">{{availRow.rate}}</span></td>
+			<td ng-repeat="availRow in roomType" context-menu="menuOptions" class="dayCell" data-date="{{availRow.configdate}}"><span><span ng-class="{'red' : {{availRow.unitsavailable}} < 0}" ng-if="availContext.type == 'a'">{{availRow.unitsavailable}}</span></span><span ng-if="availContext.type == 'b'" ng-class="{'red' : {{availRow.unitsavailable}} < 0}">{{availRow.unitbookedcount}}</span><span ng-if="availContext.type == 'r'" ng-class="{'red' : {{availRow.unitsavailable}} < 0}">{{availRow.rate}}</span></td>
 		</tr>	
 	</tbody>
 </table>
+
+<div class="modalBack">
+	<reservation-list-modal></reservation-list-modal>
+</div>

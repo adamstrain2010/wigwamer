@@ -5,6 +5,7 @@ app.factory("appService", function($http){
 	};
 	var getroomtypes = function(organisationId){
 		var apiUrl = 'http://52.19.183.139:1234/api/getRoomTypes?organisationId=' + organisationId;
+		console.log(apiUrl);
 		return $http.get(apiUrl);
 	};
 	var getallnationalities = function(){
@@ -15,7 +16,7 @@ app.factory("appService", function($http){
     function showsnackbar(message) {
         var x = document.getElementById("snackbar")
 		x.innerHTML = message;
-        setTimeout(function(){ x.className = "show"; }, 500);
+        setTimeout(function(){ x.className = "show"; }, 50);
 		setTimeout(function(){ x.className = x.className.replace("show", ""); }, 4000);
 	};
 	return{

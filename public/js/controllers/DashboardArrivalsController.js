@@ -1,4 +1,4 @@
-
+var data;
 //ARRIVALS CONTROLLER
 app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  helpers, reservation, dashboard,appService, $animate, $mdDialog, $mdToast){
     //JUST FOR DEV
@@ -24,6 +24,10 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 
 
 
+
+
+
+
     $scope.testing = function(){
         console.log("adam");
     }
@@ -39,12 +43,22 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
             $scope.arrivalDate = moment($rootScope.globalSystemDate, "DD/MM/YYYY").toDate();
             $scope.departDate = moment($rootScope.globalSystemDate, "DD/MM/YYYY").toDate();
         })
+        .then(function(){
+            appService.getRoomTypes(1)
+                .then(function(data){
+                    $scope.unitTypes = data.data.recordset;
+                    console.log($scope.unitTypes);
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        })
         .catch(function(err){
             console.log(err);
         });
 
 
-
+    console.log($scope);
 
     $scope.testModal = function(ev) {
         // Appending dialog to document.body to cover sidenav in docs app
@@ -148,7 +162,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
                         $scope.loaded = false;
                         $scope.reservations = response.data[0][0];;
                         $scope.numReservations = $scope.reservations.length;
-                        $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
+                        $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY"); r.toPay = r.toPay.toFixed(2)});
                         $scope.loaded = true;
                     })
                     .then(function(){
@@ -205,7 +219,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
                         $scope.loaded = false;
                         $scope.reservations = response.data[0][0];
                         $scope.numReservations = $scope.reservations.length;
-                        $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
+                        $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY"); r.toPay = r.toPay.toFixed(2)});
                         $(".modalFullHeight").css("display", "none");
                         $scope.checkInMessage();
                         $(".modalBack").css("display", "none");
@@ -288,6 +302,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
                 $scope.reservations.forEach(function(r){ r.fromdate = moment(r.fromdate).format("DD/MM/YY"); r.todate = moment(r.todate).format("DD/MM/YY")});
                 $scope.reservations.forEach(function(r){ r.toPay = r.toPay.toFixed(2)});
                 $scope.loaded = true;
+                console.log($scope.reservations);
             });
     }
 
@@ -307,6 +322,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
                 $scope.selectedReservation.departureDate = moment($scope.selectedReservation.todate).toDate();
                 $(".modalFullHeight").css("display", "block");
                 $('.modalBack').css("display", "block");
+                console.log($scope.selectedReservation);
             })
             .then(function(){
                 $scope.getBalanceToPay(reservationNum.reservation.idreservation);

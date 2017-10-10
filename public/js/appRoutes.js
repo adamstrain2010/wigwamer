@@ -34,8 +34,8 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			controller: 'PlannerController'	
 		})
 		
-		.when('/allocations', {
-			templateUrl: 'views/allocations.html',
+		.when('/reservations/allocations', {
+			templateUrl: 'views/reservations/allocations.html',
 			controller: 'AllocationsController'
 		})
 		
@@ -43,7 +43,12 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			templateUrl: 'views/reservations/availability.html',
 			controller: 'AvailabilityController'	
 		})
-		
+
+		.when('/reservations/reservations_made', {
+			templateUrl: 'views/reservations/reservations_made.html',
+			controller: 'NewReservationsMadeController'
+		})
+
 		.when('/housekeeping', {
 			templateUrl: 'views/housekeeping.html',
 			controller: 'HousekeepingController'	

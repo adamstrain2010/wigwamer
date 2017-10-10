@@ -1,13 +1,43 @@
-app.controller("AvailabilityController", function($scope, $rootScope, $location, $http, appService, availability){
+app.controller("AvailabilityController", function($scope, $rootScope, $location, $http, appService, availability, dashboard){
 	$rootScope.pageTitle = "AVAILABILITY|";
 	$rootScope.subtitle = "available";
 
-	$rootScope.availContext = {"type":"a"};
+	$scope.availContext = {"type":"a"};
 
+	$scope.doThis = function(){
+		console.log("do this");
+	};
 
 	$scope.loaded = false;
 
 	$scope.negative = true;
+
+	$scope.inHouseResList = [];
+
+    $scope.menuOptions = [
+        ['Show Reservations', function ($itemScope, $event, modelValue, text, $li) {
+        $scope.resListDate = moment($itemScope.availRow.configdate, "DD/MM/YYYY").format("YYYY-MM-DD");
+        $scope.resListDateFormatted = moment($itemScope.availRow.configdate, "DD/MM/YYYY").format("DD/MM/YYYY");
+        console.log(moment($itemScope.availRow.configdate, "DD/MM/YYYY").format("ddd"));
+        $scope.unitType = $itemScope.availRow.unittypedesc;
+        console.log($itemScope.availRow);
+		dashboard.getInHouse($scope.resListDate, $itemScope.availRow.idunittype)
+			.then(function(data){
+				$scope.inHouseResList = data;
+				$scope.inHouseReservations = [];
+                $scope.inHouseReservations = $scope.inHouseResList.data[0][0];
+                $scope.inHouseReservations.forEach(function(r){r.fromdate = moment(r.fromdate).format("DD/MM/YYYY");r.todate = moment(r.todate).format("DD/MM/YYYY")});
+                console.log($scope.inHouseReservations);
+                console.log($scope.inHouseResList);
+			})
+			.catch(function(err){
+				console.log(err)
+			});
+        $(".modalBack").css("display", "block");
+        }]
+    ];
+
+    console.log($scope);
 
     appService.getSystemDate()
         .then(function(result){
@@ -52,15 +82,13 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 
 	$scope.showAvailability = function(fromDate, toDate){
 		var numDays = moment(toDate).diff(moment(fromDate), 'days');
-		console.log(moment(fromDate));
 		availability.getAvailabilityByRange(1,1,1,-1,fromDate,toDate)
 			.then(function(result){
 				$scope.loaded = false;
 				$scope.availRows = result.data[0][0];
-				$scope.availRows.forEach(function(r){ r.configdate = moment(r.configdate).format("DD/MM/YY"); console.log(r)});
+				$scope.availRows.forEach(function(r){ r.configdate = moment(r.configdate).format("DD/MM/YY")});
 				$scope.availRows.forEach(function(r){ r.rate = "£" + r.rate.toFixed(2)});
 				$scope.availRows = $scope.availRows.chunk(numDays);
-				console.log($scope.availRows);
 				$scope.loaded = true;
 			})
 			.catch(function(err){
@@ -79,20 +107,36 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 	// });
 
 
-	$rootScope.contextMenuOptions = [{"title": "Available","href":"", "click":"a"},{"title": "Booked","href":"", "click":"b"},{"title": "Rates","href":"", "click":"r"},{"title": "New Reservation","href":"", "click":null}]
+	$rootScope.contextMenuOptions = [{}]
 
 
 
-	var dates = [];
+    var dates = [];
+    var leftClick;
     $(document).on("mousedown",'.dayCell', function(){
         dates = [];
-        dates.push(moment($(this).data("date"),"DD/MM/YYYY"));
+        console.log(dates);
+    	leftClick = false;
+    	switch(event.which){
+			case 1:
+				leftClick = true;
+                dates = [];
+                dates.push(moment($(this).data("date"),"DD/MM/YYYY"));
+				break;
+            case 3:
+                break;
+		}
 
 	});
-	$(document).on("mouseup", '.dayCell', function(){
-		dates.push(moment($(this).data("date"),"DD/MM/YYYY"));
-		showDates();
-	});	
+    $(document).on("mouseup", '.dayCell', function(){
+		if(leftClick == true){
+            dates.push(moment($(this).data("date"),"DD/MM/YYYY"));
+            showDates();
+		}
+		else{
+			return;
+		}
+	});
 
 	function showDates(){
 		var startDate = null;
@@ -114,6 +158,14 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 			console.log("no");
 		}
 	}
+
+	$scope.changeFromDate = function(){
+		moment($scope.pickerFromDate) > moment($scope.pickerToDate) ? $scope.pickerToDate = moment($scope.pickerFromDate).add('days', 1).toDate() : "";
+	}
+
+    $scope.changeToDate = function(){
+        moment($scope.pickerToDate) < moment($scope.pickerFromDate) ? $scope.pickerFromDate = moment($scope.pickerToDate).add('days', -1).toDate() : "";
+    }
 }).config(function($mdDateLocaleProvider){
     $mdDateLocaleProvider.formatDate = function(date) {
         return date ? moment(date).format('DD/MM/YYYY') : ''
