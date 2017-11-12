@@ -57,24 +57,24 @@ app.directive("extrasForm",function($compile, dashboard){
             function getExtras(){
                 console.log("adam");
                 dashboard.getAllSpecials()
-                .then(function(data){
-                    console.log(data);
-                    if(data != null){
-                        console.log(data.data.recordsets);
-                        scope.extras = data.data.recordset;
-                        console.log(scope.extras);
-                        console.log("done");
-                    }
-                    else{
-                        console.log("nada");
-                    }
-                })
-                .catch(function(err){
-                    console.log(err);
-                })
-                .then(function(){
-                    console.log("something");
-                });
+                    .then(function(data){
+                        console.log(data);
+                        if(data != null){
+                            console.log(data.data.recordsets);
+                            scope.extras = data.data.recordset;
+                            console.log(scope.extras);
+                            console.log("done");
+                        }
+                        else{
+                            console.log("nada");
+                        }
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+                    .then(function(){
+                        console.log("something");
+                    });
             }
             scope.loaded = false;
             var reservationId = scope.$parent.selectedReservation.idreservation;
@@ -103,29 +103,29 @@ app.directive("extrasForm",function($compile, dashboard){
                 for(var i = 0; i < scope.extraChargesToAdd.length; i++){
                     console.log(scope.extraChargesToAdd[i]);
                     dashboard.insertExtra(scope.extraChargesToAdd[i], reservationId)
-                    .then(function(result){
-                        //do something here?
-                    })
-                    .catch(function(err){
-                        console.log(err);
-                    });
+                        .then(function(result){
+                            //do something here?
+                        })
+                        .catch(function(err){
+                            console.log(err);
+                        });
                 };
             }
             scope.getExtrasForReservation = function(){
                 scope.extraChargesToAdd = [];
                 dashboard.getReservationExtras(reservationId)
-                .then(function(result){
-                    scope.extraChargesToAdd = result.data.recordset;
-                    scope.extraChargesToAdd.forEach(function(r){r.unitPrice = "£" + r.unitPrice.toFixed(2); r.subTotal = "£" + r.subTotal.toFixed(2)});
-                    scope.numRows = scope.extraChargesToAdd.length;
-                    scope.loaded = true;
-                })
-                .then(function(){
-                    getExtras();
-                })
-                .catch(function(err){
-                    console.log(err);
-                });
+                    .then(function(result){
+                        scope.extraChargesToAdd = result.data.recordset;
+                        scope.extraChargesToAdd.forEach(function(r){r.unitPrice = "£" + r.unitPrice.toFixed(2); r.subTotal = "£" + r.subTotal.toFixed(2)});
+                        scope.numRows = scope.extraChargesToAdd.length;
+                        scope.loaded = true;
+                    })
+                    .then(function(){
+                        getExtras();
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
             }
 
 
@@ -133,5 +133,3 @@ app.directive("extrasForm",function($compile, dashboard){
         }
     };
 });
-
-

@@ -47,7 +47,7 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
         })
         .then(function(){
 			$scope.fromDate = $rootScope.globalSystemDate.format("YYYY-MM-DD");
-			$scope.toDate = $rootScope.globalSystemDate.add('days', 14).format("YYYY-MM-DD");
+			$scope.toDate = $rootScope.globalSystemDate.add('days', 10).format("YYYY-MM-DD");
 			$scope.showAvailability($scope.fromDate, $scope.toDate);
 			$scope.pickerFromDate = moment($scope.fromDate).toDate();
 			$scope.pickerToDate = moment($scope.toDate).toDate();

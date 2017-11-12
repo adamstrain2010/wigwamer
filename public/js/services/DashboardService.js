@@ -22,9 +22,14 @@ app.factory("dashboard", function($http){
         var apiUrl = 'http://52.19.183.139:1234/api/cancelReservation?reservationNum=' + reservationNum;
         return $http.post(apiUrl);
     };
-    var newReservation = function(surname, forename, arrivalDate,departureDate, bookingSource, nationalityId, idUnitType, idRateCode){
-        console.log(idUnitType);
-        var apiUrl = "http://52.19.183.139:1234/api/saveReservation?clientId=1&surname=" + surname + "&forename=" + forename + "&arrivalDate=" + arrivalDate + "&departureDate=" + departureDate + "&bookingSource=" + bookingSource + "&idNationality=" + nationalityId + "&idUnitType=" + idUnitType + "&idRateCode=" + idRateCode;
+    var newReservation = function(surname, forename, arrivalDate,departureDate, bookingSource, nationalityId, idUnitType, idUnit, idRateCode){
+       if(idUnit != null){
+           var apiUrl = "http://52.19.183.139:1234/api/saveReservation?clientId=1&surname=" + surname + "&forename=" + forename + "&arrivalDate=" + arrivalDate + "&departureDate=" + departureDate + "&bookingSource=" + bookingSource + "&idNationality=" + nationalityId + "&idUnitType=" + idUnitType + "&idUnit=" + idUnit + "&idRateCode=" + idRateCode;
+       }
+       else{
+           var apiUrl = "http://52.19.183.139:1234/api/saveReservation?clientId=1&surname=" + surname + "&forename=" + forename + "&arrivalDate=" + arrivalDate + "&departureDate=" + departureDate + "&bookingSource=" + bookingSource + "&idNationality=" + nationalityId + "&idUnitType=" + idUnitType + "&idRateCode=" + idRateCode;
+       }
+        console.log(apiUrl);
         return $http.post(apiUrl);
     };
     var checkout = function(reservationId){
@@ -46,6 +51,7 @@ app.factory("dashboard", function($http){
     }
     var showdata = function(reservationId){
         var apiUrl = 'http://52.19.183.139:1234/api/getReservation?reservationId=' + reservationId;
+        console.log(apiUrl);
         return $http({
             method: 'POST',
             url: apiUrl,
@@ -111,6 +117,15 @@ app.factory("dashboard", function($http){
         console.log(apiUrl);
         return $http.post(apiUrl);
     };
+    var deleteextracharge = function(idReservationExtraCharge){
+        var apiUrl = "http://52.19.183.139:1234/api/deleteExtra?idReservationExtra=" + idReservationExtraCharge;
+        console.log(apiUrl);
+        return $http.delete(apiUrl);
+    };
+    var getconcurrentrooms = function(fromDate, toDate, idUnitType){
+        var apiUrl = "http://52.19.183.139:1234/api/getConcurrentRooms?fromDate=" + fromDate + "&toDate=" + toDate + "&idUnitType=" + idUnitType;
+        return $http.get(apiUrl);
+    }
     return{
         getReservationsDeparting: getReservationsByDepartDate,
         method2: getReservationByArrivalDate,
@@ -135,7 +150,9 @@ app.factory("dashboard", function($http){
         insertPosting: insertposting,
         getPostings: getpostings,
         voidTransaction: voidtransaction,
-        getInHouse: getinhouse
+        getInHouse: getinhouse,
+        deleteExtraCharge: deleteextracharge,
+        getConcurrentRooms: getconcurrentrooms
     }
 });
 

@@ -104,6 +104,8 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 	$("#surnameInput").focus();
 	$rootScope.contextMenuOptions = [{"title": "Arrivals","href":"dashboard/arrivals"},{"title": "Departures","href":"dashboard/departures"},{"title": "In House","href":"dashboard/inHouse"},{"title": "New Reservation","href":"dashboard/newReservation"}]
 
+	$scope.roomsToSave = [];
+
 	$scope.save = function(){
 		console.log($scope.selectedUnitType.idunittype);
 		$rootScope.newResFlag = false;
@@ -115,7 +117,8 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 		console.log(toDate);
 		if($scope.nationality == null){
 			element = $scope.selectedUnitType.idunitype;
-			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, 900, element, 1)
+            console.log("1st");
+			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, 900, element, $scope.roomsToSave[0],1)
 			.then(function(result){
                 $scope.goToArrivals();
 				// $scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
@@ -127,8 +130,21 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 				console.log(err);
 			});
 		}
+		if($scope.roomsToSave[0] == null){
+            dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry,$scope.selectedUnitType.idunittype, null,1)
+                .then(function(result){
+                    $scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
+                    $(".messageModal").css("display", "block");
+                    $(".modalBack").css("display","block");
+                    $("#modalButton").focus();
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+		}
 		else{
-			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry,$scope.selectedUnitType.idunittype)
+			console.log("2nd");
+			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry,$scope.selectedUnitType.idunittype, $scope.roomsToSave[0],1)
 			.then(function(result){
 				$scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
 				$(".messageModal").css("display", "block");

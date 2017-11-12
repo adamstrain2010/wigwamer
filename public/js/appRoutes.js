@@ -60,8 +60,13 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		})
 
 		.when('/test',{
-			templateUrl: 'views/test/test.html',
-			controller: 'testController'
+			templateUrl: 'views/roomSelectTest.html',
+			controller: 'roomSelect'
+		})
+
+		.when('/rollDay',{
+			templateUrl: 'views/rollDay.html',
+			controller: 'RollDayController'
 		})
 
 		.otherwise({

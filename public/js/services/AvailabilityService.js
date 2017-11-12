@@ -1,6 +1,7 @@
 app.factory('availability', function($http){
     var getavailabilitybyrange = function(clientId, propertyId, rateCodeId, unitTypeId, fromDate, toDate){
         var apiUrl = "http://52.19.183.139:1234/api/testingRoute?clientId=" + clientId + "&propertyId=" + propertyId + "&rateCodeId=" + rateCodeId + "&unitTypeId=" + unitTypeId + "&fromDate=" + fromDate + "&toDate=" + toDate;
+        console.log(apiUrl);
         // var apiUrl = "http://52.19.183.139:1234/api/testingRoute";
         return $http.get(apiUrl);
     };

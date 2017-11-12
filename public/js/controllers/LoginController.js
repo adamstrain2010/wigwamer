@@ -20,24 +20,33 @@ app.controller('LoginController', function($scope,$rootScope,$location, $http, $
 				url: apiUrl
 			})
 			.then(function successCallback(response){
-				console.log("response comes next")
-				console.log(response.data);
-				console.log(response.data.recordset.length);
-                $cookieStore.put("user", "roger");
-				login(response.data.recordset.length);
-			 }, function errorCallback(err){
-				if(err.data == null){
-					$scope.showMessage("error", "The wigwamer API is currently down. Please contact support.");
+                var apiUrl = 'http://52.19.183.139:1234/api/getSystemOptions?idproperty=' + $scope.property;
+                $http({
+                    method: 'GET',
+                    url: apiUrl
+                })
+                    .then(function(data){
+                    	var options = data.data.recordsets[0];
+                        console.log(options);
+                        $cookies.putObject('globals', options);
+                        console.log($cookies.getObject('globals'));
+                    })
+					.then(function(){
+                        $cookieStore.put("user", "roger");
+                        login(response.data.recordset.length);
+                    }, function errorCallback(err){
+                        if(err.data == null){
+                            $scope.showMessage("error", "The wigwamer API is currently down. Please contact support.");
+                        }
+                        else{
+                            $scope.showMessage("error",err.data + "\n Please contact support if problem persists");
+                        }
+                    	});
+					})
 				}
-				else{
-					$scope.showMessage("error",err.data + "\n Please contact support if problem persists");
-				}
-                	});
-
-		}
-		else{
-			$scope.showMessage("warning","Something is missing. Please check and try again");
-		}
+			else{
+				$scope.showMessage("warning","Something is missing. Please check and try again");
+			}
 
 	};
 

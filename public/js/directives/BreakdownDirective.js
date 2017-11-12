@@ -1,8 +1,9 @@
 app.directive("breakdownPartial",function(dashboard){
     return{
         restrict: 'E',
-        replace: false,
-        template: '<div><div class="text-center" ng-show="!loaded"><i class="fa fa-circle-o-notch fa-spin loader" aria-hidden="true"></i></div>' +
+        replace: true,
+        template: '<div style="height: 100%"><div><div class="text-center" ng-show="!loaded"><i class="fa fa-circle-o-notch fa-spin loader" aria-hidden="true"></i></div></div>' +
+        '<div style="height: 100%; overflow-y: scroll">' +
         '    <table class="table table-striped table-bordered" ng-show="loaded">\n' +
         '        <thead>\n' +
         '            <th>Date</th>\n' +
@@ -18,11 +19,12 @@ app.directive("breakdownPartial",function(dashboard){
         '                <td>Double</td>\n' +
         '                <td></td>\n' +
         '                <td>BAR</td>\n' +
-        '                <td ng-dblclick="editPax(this)"><span ng-show="!editing" ng-model="pax">1</span><span ng-show="editing"><input type="number" ng-model="pax"></span></td>\n' +
-        '                <td ng-dblclick="editRate(this)"><span ng-show="!editing">{{chargeRow.gross}}</span><span ng-show="editing"><input type="number" ng-model="chargeRow.gross"></span></td>\n' +
+        '                <td>1</td>\n' +
+        '                <td>{{chargeRow.gross}}</td>\n' +
         '            </tr>\n' +
         '        </tbody>\n' +
         '    </table>\n' +
+        '</div>' +
         '</div>',
         link: function(scope, elem, attrs){
             scope.loaded = false;
@@ -39,6 +41,7 @@ app.directive("breakdownPartial",function(dashboard){
             function getChargesForReservation(reservationId){
                 dashboard.getChargeBreakdown(reservationId)
                 .then(function(data){
+                    console.log(data);
                     scope.chargeRows = data.data[0][0];
                     scope.chargeRows.forEach(function(r){ r.chargedate = moment(r.chargedate).format("DD/MM/YY")});
                     scope.chargeRows.forEach(function(r){ r.gross = "£" + r.gross.toFixed(2)});

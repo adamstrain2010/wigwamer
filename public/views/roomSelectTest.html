@@ -1,0 +1,17 @@
+<div>
+    <div>
+        <h4>Select a Room..</h4>
+        <span>{{numSelectable - numSelected}} rooms left to select</span>
+        <table style="width: 100%">
+            <tr>
+                <td style="border: thin solid black; height: 40px;"></td>
+                <th ng-repeat="day in days" style="border: thin solid black">{{day}}</th>
+            </tr>
+            <tr ng-repeat="room in rooms" class="roomRow">
+                <td style="border: thin solid black; height: 40px; font-weight: bold">{{room.number}}</td>
+                <td ng-repeat="day in days" style="border: thin solid black; height: 40px;"
+                    ng-click="selectRoom(room)" class="dayRoom"><i ng-show="room.selected" class="fa fa-check white" aria-hidden="true"></i></td>
+            </tr>
+        </table>
+    </div>
+</div>
