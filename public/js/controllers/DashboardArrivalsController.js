@@ -116,14 +116,15 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
                         .ok('Yes')
                     $(".modalBack").css("display", "none");
                     $mdDialog.show(confirm).then(function() {
-                        $scope.checkIn($scope.selectedReservation.idreservation);
+                        console.log($scope.selectedReservation);
+                        $scope.checkIn($scope.selectedReservation);
                         //$scope.checkIn();
                     }, function() {
                         $(".modalBack").css("display", "block");
                     });
                 }
                 else{
-                    $scope.checkIn($scope.selectedReservation.idreservation);
+                    $scope.checkIn($scope.selectedReservation);
                 }
             })
             .catch(function(err){
@@ -178,8 +179,8 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
             })
     }
 
-
-
+    $scope.resTypeOptions = {"canCancel": true, "canCheckIn": true, "canCheckOut": false};
+    console.log($scope.resTypeOptions);
     $scope.numReservations = null;
 
 
@@ -204,7 +205,16 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
             });
     };
 
+    $scope.testSave = function(){
+        var els = [];
+        els = document.getElementsByClassName('ng-touched');
+        console.log(this);
+    }
+
+    $scope.saveButtonDisabled = false;
+
     $scope.setModal = function(state){
+        $scope.saveButtonDisabled = state != 'reservation' ? true : false;
         $scope.modalContextOpen = state;
     }
     $scope.modalContextOpen = "reservation";
@@ -218,7 +228,8 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 
 
     $scope.checkIn = function(el){
-        dashboard.checkInSingle(el)
+        console.log(el);
+        dashboard.checkInSingle(el.idreservation, el.idunit)
             .then(function(data){
                 dashboard.getReservations($scope.systemDate)
                     .then(function(response){
@@ -269,7 +280,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
     $rootScope.subtitle = "arrivals";
 
     $scope.sortType = "reservationname";
-    $scope.sortReverse = false;
+    $scope.sortReverse = true;
 
     $rootScope.searchOpen = false;
     $rootScope.search = function(){
@@ -319,10 +330,34 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
 
     $scope.selectedReservation;
 
+    $scope.thisReservation = {
+        "reservationNumber":null,
+        "surname":null,
+        "forename": null,
+        "arriving": null,
+        "departing": null,
+        "unitTypeId": null,
+        "unitId": null,
+        "unitDescription": null,
+        "rateCodeId": null
+    };
+
     $scope.setCurrentReservation = function(reservationNum){
         dashboard.showData(reservationNum.reservation.idreservation)
             .then(function(res){
                 $scope.selectedReservation = res.recordset[0];
+                $scope.thisReservation.reservationNumber = $scope.selectedReservation.idreservation;
+                $scope.thisReservation.surname = $scope.selectedReservation.surname;
+                $scope.thisReservation.forename = $scope.selectedReservation.forename;
+                $scope.thisReservation.arriving = moment($scope.selectedReservation.fromdate).toDate();
+                $scope.thisReservation.departing = moment($scope.selectedReservation.todate).toDate();
+                $scope.thisReservation.unitTypeId = $scope.selectedReservation.idunittype;
+                $scope.thisReservation.unitId = $scope.selectedReservation.idunit;
+                $scope.thisReservation.unitDescription = $scope.selectedReservation.unitdescription;
+                $scope.thisReservation.rateCodeId = $scope.selectedReservation.idratecode;
+
+                console.log($scope.thisReservation);
+
                 $scope.selectedReservation.arrivalDate = moment($scope.selectedReservation.fromdate).toDate();
                 $scope.selectedReservation.departureDate = moment($scope.selectedReservation.todate).toDate();
                 if($scope.selectedReservation.idunit == null){
@@ -432,6 +467,31 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
             console.log(err);
         })
     };
+
+    $scope.isPristine = function(el){
+        if(document.getElementsByName("resForm")[0].classList.contains('ng-pristine')){
+            console.log("ITS PRISTINE!");
+        }
+    }
+
+    $scope.updateReservation = function(){
+        $scope.loaded = false;
+        $scope.numReservations = 0;
+        console.log($scope.resForm);
+        console.log(resForm);
+        dashboard.updateRes($scope.thisReservation.reservationNumber,$scope.thisReservation.forename,moment($scope.thisReservation.arriving, "MM/DD/YYYY").format("YYYY-MM-DD"),moment($scope.thisReservation.departing, "MM/DD/YYYY").format("YYYY-MM-DD"),$scope.thisReservation.unitTypeId, $scope.thisReservation.unitId, $scope.thisReservation.rateCodeId)
+            .then(function(result){
+                $rootScope.message = "Reservation " + $scope.thisReservation.reservationNumber + " successfully updated.";
+                $scope.showSnack();
+                getReservations($scope.systemDate);
+            })
+            .catch(function(err){
+                console.log(err);
+            })
+
+    }
+
+
 
 }).config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function (date) {

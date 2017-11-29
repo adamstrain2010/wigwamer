@@ -36,6 +36,7 @@ tbody>tr>td, tbody>tr>th, thead>tr>th{
 	vertical-align: middle !important;	
 	overflow: hidden;
 	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .full>tbody>tr>th{
@@ -494,6 +495,11 @@ md-dialog md-dialog-actions button {
 	animation-duration: 0.1s
 }
 
+.fadeIn{
+	animation-name: fadeIn;
+	animation-duration: 5s
+}
+
 .notComplete{
 	opacity: 0;
 }
@@ -508,4 +514,33 @@ md-dialog md-dialog-actions button {
 
 .margin-left-10{
 	margin-left: 10px;
+}
+
+.greyed{
+	background-color: rgba(0,0,0,0.25);
+}
+
+.selectChoice{
+	border: 3px solid white;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.selectChoice:hover{
+	border: 3px solid white;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: white;
+	color: orange;
+}
+
+*:focus{
+	outline: none;
+}
+
+.orangeWhite{
+	background-color: orange;
+	color: white;
 }

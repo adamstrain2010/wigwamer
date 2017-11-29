@@ -40,6 +40,15 @@ app.factory("appService", function($http){
 
         console.log(apiUrl);
 
+	};
+    function autoallocate(reservationArray){
+    	reservationArray = encodeURIComponent(reservationArray);
+		var apiUrl = "http://52.19.183.139:1234/api/autoAllocate?reservations=" + reservationArray;
+		return $http.post(apiUrl);
+	};
+    function rollday(){
+    	var apiUrl = "http://52.19.183.139:1234/api/rollDay";
+    	return $http.post(apiUrl);
 	}
 	return{
 		getSystemDate: getsystemdate,
@@ -48,7 +57,9 @@ app.factory("appService", function($http){
 		getRateCodes: getratecodes,
 		showSnackBar: showsnackbar,
 		checkArrivalsProcessed: checkarrivalsprocessed,
-		allocateRoom: allocateroom
+		allocateRoom: allocateroom,
+		autoAllocate: autoallocate,
+		rollDay: rollday
 	}
 });
 

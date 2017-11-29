@@ -1,6 +1,7 @@
 app.factory("dashboard", function($http){
     var getReservationsByDepartDate = function(departDate){
         var apiUrl = 'http://52.19.183.139:1234/api/reservationsByDepartDate?departDate=' + departDate;
+        console.log(apiUrl);
         return $http.post(apiUrl);
     };
     var getReservationByArrivalDate = function(){
@@ -10,8 +11,8 @@ app.factory("dashboard", function($http){
         var apiUrl = 'http://52.19.183.139:1234/api/reservationsInHouse';
         return $http.post(apiUrl);
     };
-    var checkInIndividual = function(reservationNum){
-        var apiUrl = 'http://52.19.183.139:1234/api/checkIn?reservationNum=' + reservationNum;
+    var checkInIndividual = function(reservationNum, idUnit){
+        var apiUrl = 'http://52.19.183.139:1234/api/checkIn?reservationNum=' + reservationNum + '&idUnit=' + idUnit;
         return $http.post(apiUrl);
     };
     var searchReservations = function(searchString){
@@ -32,8 +33,8 @@ app.factory("dashboard", function($http){
         console.log(apiUrl);
         return $http.post(apiUrl);
     };
-    var checkout = function(reservationId){
-        var apiUrl = 'http://52.19.183.139:1234/api/checkOut?reservationNum=' + reservationId;
+    var checkout = function(reservationId, unitId){
+        var apiUrl = 'http://52.19.183.139:1234/api/checkOut?reservationNum=' + reservationId + "&unitId=" + unitId;
         return $http.post(apiUrl);
     };
     var getdate = function(){
@@ -42,6 +43,12 @@ app.factory("dashboard", function($http){
     };
     var getreservations = function(arrivalDate){
         var apiUrl = 'http://52.19.183.139:1234/api/reservations?arrivalDate=' + arrivalDate;
+        return $http.post(apiUrl);
+    };
+    var getreservationsfull = function(arrivalFromDate, arrivalToDate, departureFromDate, departureToDate){
+        console.log(arrivalFromDate);
+        var apiUrl = 'http://52.19.183.139:1234/api/getReservationsFull?arrivalFromDate=' + arrivalFromDate + "&arrivalToDate=" + arrivalToDate +  "&departureFromDate=" + departureFromDate + "&departureToDate=" + departureToDate;
+        console.log(apiUrl)
         return $http.post(apiUrl);
     };
     var getinhouse = function(inHouseDate, idunittype){
@@ -124,7 +131,28 @@ app.factory("dashboard", function($http){
     };
     var getconcurrentrooms = function(fromDate, toDate, idUnitType){
         var apiUrl = "http://52.19.183.139:1234/api/getConcurrentRooms?fromDate=" + fromDate + "&toDate=" + toDate + "&idUnitType=" + idUnitType;
+        console.log(apiUrl);
         return $http.get(apiUrl);
+    }
+    var getnonconcurrentrooms = function(idUnitType){
+        var apiUrl = "http://52.19.183.139:1234/api/getNonConcurrentRooms?idUnitType=" + idUnitType;
+        console.log(apiUrl);
+        return $http.get(apiUrl);
+    };
+    var getdetailedavailability = function(fromDate, toDate, idUnitType){
+        var apiUrl = "http://52.19.183.139:1234/api/getDetailedAvailability?fromDate=" + fromDate + "&toDate=" + toDate + "&idUnitType=" + idUnitType;
+        console.log(apiUrl);
+        return $http.get(apiUrl);
+    };
+    var getallreservations = function(arrivalDateFrom, arrivalDateTo, departureDateFrom, departureDateTo){
+        var apiUrl = "http://52.19.183.139:1234/api/getAllReservations?arrivalFromDate=" + arrivalDateFrom + "&arrivalToDate=" + arrivalDateTo + "&departureFromDate=" + departureDateFrom + "&departureToDate=" + departureDateTo;
+        console.log(apiUrl);
+        return $http.get(apiUrl);
+    };
+    var updateres = function(reservationNumber,forename,arriving,departing,unitTypeId, unitId, rateCodeId){
+        var apiUrl = "http://52.19.183.139:1234/api/updateRes?resId=" + reservationNumber + "&forename=" + forename + "&arriving=" + arriving + "&departing=" + departing + "&unitTypeId=" + unitTypeId + "&unitId=" + unitId + "&rateCodeId=" + rateCodeId;
+        console.log(apiUrl);
+        return $http.post(apiUrl);
     }
     return{
         getReservationsDeparting: getReservationsByDepartDate,
@@ -152,7 +180,12 @@ app.factory("dashboard", function($http){
         voidTransaction: voidtransaction,
         getInHouse: getinhouse,
         deleteExtraCharge: deleteextracharge,
-        getConcurrentRooms: getconcurrentrooms
+        getConcurrentRooms: getconcurrentrooms,
+        getNonConcurrentRooms: getnonconcurrentrooms,
+        getDetailedAvailability: getdetailedavailability,
+        getAllReservations: getallreservations,
+        updateRes: updateres,
+        getReservationsFull: getreservationsfull
     }
 });
 

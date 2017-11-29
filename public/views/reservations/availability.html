@@ -2,22 +2,37 @@
 	<i class="fa fa-circle-o-notch fa-spin loader" aria-hidden="true"></i>
 </div>
 <div class="row" style="padding-bottom: 15px" ng-show="loaded">
-	<div class="col-md-3" style="text-align: center">
-		<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="a" checked>Available</label>
-		<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="b">Booked</label>
-		<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="r">Rates</label>
+	<div class="col-md-4" style="text-align: left; padding-left: 0">
+		<div class="row">
+			<div class="col-md-12">
+				<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="a" checked>Available</label>
+				<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="b">Booked</label>
+				<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="u" checked>Total</label>
+				<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="al">Allocated</label>
+				<label class="radio-inline"><input type="radio" name="optradio" ng-model="availContext.type" value="r">Rates</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12" style="color: orange; text-transform: uppercase; padding-top: 5px">
+				<span ng-if="availContext.type == 'a'">Number of units available to sell.</span>
+				<span ng-if="availContext.type == 'b'">Number of units sold.</span>
+				<span ng-if="availContext.type == 'u'">Total number of units in inventory.</span>
+				<span ng-if="availContext.type == 'al'">Number of units allocated compared to sold.</span>
+				<span ng-if="availContext.type == 'r'">Rate for unit by rate code.</span>
+			</div>
+		</div>
+
 	</div>
 	<div class="col-md-2">
-		<div class="form-group" ng-show="availContext.type == 'r'">
+		<div class="form-group" ng-style="{'visibility': availContext.type == 'r' ? 'visible': 'hidden'}">
 			<label>Rate Code</label>
-			<select class="form-control" ng-model="selectedReservation.idunittype" ng-options="" style="margin-top:4px">
+			<select class="form-control" ng-model="selectedReservation.idunittype" style="margin-top:4px">
 				<option>BAR</option>
 			</select>
 		</div>
 	</div>
 	<div class="col-md-1">
-	</div>
-	<div class="col-md-1">
+		<button ng-click="testrt()">Test</button>
 	</div>
 	<div class="col-md-2">
 		<!-- Date input -->
@@ -42,7 +57,7 @@
 	<tbody>
 		<tr ng-repeat="roomType in availRows">
 			<td style="text-align: left; font-weight: bold">{{roomType[0].unittypedesc}}</td>
-			<td ng-repeat="availRow in roomType" context-menu="menuOptions" class="dayCell" data-date="{{availRow.configdate}}"><span><span ng-class="{'red' : {{availRow.unitsavailable}} < 0}" ng-if="availContext.type == 'a'">{{availRow.unitsavailable}}</span></span><span ng-if="availContext.type == 'b'" ng-class="{'red' : {{availRow.unitsavailable}} < 0}">{{availRow.unitbookedcount}}</span><span ng-if="availContext.type == 'r'" ng-class="{'red' : {{availRow.unitsavailable}} < 0}">{{availRow.rate}}</span></td>
+			<td ng-repeat="availRow in roomType" context-menu="menuOptions" class="dayCell" data-date="{{availRow.configdate}}"><span><span ng-class="{'red' : {{availRow.unitsavailable}} < 0}" ng-if="availContext.type == 'a'">{{availRow.unitsavailable}}</span></span><span ng-if="availContext.type == 'b'" ng-class="{'red' : {{availRow.unitsavailable}} < 0}">{{availRow.unitbookedcount}}</span><span ng-if="availContext.type == 'r'" ng-class="{'red' : {{availRow.unitsavailable}} < 0}">{{availRow.rate}}</span><span ng-if="availContext.type == 'al'" ng-class="{'red' : {{availRow.unitsavailable}} < 0}">{{availRow.unitallocatedcount}}/{{availRow.unitbookedcount}}</span><span ng-if="availContext.type == 'u'" ng-class="{'red' : {{availRow.unitsavailable}} < 0}">{{availRow.unitcount}}</span></td>
 		</tr>	
 	</tbody>
 </table>

@@ -1,4 +1,4 @@
-var app = angular.module('MainCtrl', ['ngAria', 'ngAnimate','ngMaterial', 'ui.router', 'ngCookies', 'ui.bootstrap.contextMenu', 'md.data.table','angularUtils.directives.dirPagination']);
+var app = angular.module('MainCtrl', ['ngAria', 'ngAnimate','ngMaterial', 'ui.router', 'ngCookies', 'ui.bootstrap.contextMenu', 'md.data.table','angularUtils.directives.dirPagination', 'ngMaterialDateRangePicker']);
 
 app.factory("reservation", function($http){
 	return {
@@ -34,7 +34,6 @@ app.factory("helpers",function(){
 });
 
 app.run(function($rootScope, $http, $location, $cookies, $cookieStore, dashboard, dashboard){
-
 
 	var currentUser = $cookieStore.get("user");
 	$rootScope.rollDay = function(){

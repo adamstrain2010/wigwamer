@@ -12,7 +12,7 @@
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-click="sortType = 'fromdate'; sortReverse = !sortReverse;">Arrival Date<span ng-show="sortType == 'fromdate' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'fromdate' &&sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-click="sortType = 'todate'; sortReverse = !sortReverse;">Departure Date<span ng-show="sortType == 'todate' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'todate' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 175px"><a class="noFingerLink" href="#" ng-click="sortType = 'unittype'; sortReverse = !sortReverse;">Unit Type<span ng-show="sortType == 'unittype' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'unittype' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
-		<th style="width: 100px"><a class="noFingerLink" href="#" ng-click="sortType = 'unitdescription'; sortReverse = !sortReverse;">Unit<span ng-show="sortType == 'unitdescription' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'unitdescription' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
+		<th style="width: 150px"><a class="noFingerLink" href="#" ng-click="sortType = 'unitdescription'; sortReverse = !sortReverse;">Unit<span ng-show="sortType == 'unitdescription' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'unitdescription' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-click="sortType = 'confnum'; sortReverse = !sortReverse;">Confirmation #<span ng-show="sortType == 'confnum' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'confnum' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-click="sortType = 'bookingsource'; sortReverse = !sortReverse;">Booking Source<span ng-show="sortType == 'bookingsource' && sortReverse == false" class="fa fa-caret-down"></span><span ng-show="sortType == 'bookingsource' && sortReverse == true" class="fa fa-caret-up ng-hide"></span></a></th>
 		<th style="width: 125px"><a class="noFingerLink" href="#" ng-type="sortType = 'toPay'; sortReverse = !sortReverse;">To Pay<span ng-show="sortType == 'toPay' && sortReverse == true" class="fa fa-caret-up ng-hide"></span><span ng-show="sortType == 'toPay' && sortReverse == true" class="fa fa-caret-up ng-hide"></a></th>
@@ -21,20 +21,20 @@
 	</tr>
 	<tr ng-repeat="reservation in reservations | orderBy:sortType:sortReverse">
 		<td>{{ reservation.idreservation }}</td>
-		<td>{{ reservation.reservationname }}</td>
+		<td style="text-transform: capitalize">{{ reservation.reservationname }}</td>
 		<td>{{ reservation.fromdate }}</td>
 		<td>{{ reservation.todate }}</td>
 		<td>{{ reservation.unittypedesc }}</td>
-		<td>{{ reservation.unitdescription }}</td>
+		<td>{{ reservation.unitnumber }}</td>
 		<td>{{ reservation.reservationsourcecode | uppercase}}-1234567</td>
 		<td><span data-toggle="tooltip" title="{{reservation.reservationsourcedescription}}" class="bSource" style="background-color: {{reservation.reservationcolour}}; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold">{{ reservation.reservationsourcecode }}</span></td>
 		<td>£{{ reservation.toPay }}</td>
 		<td data-toggle="tooltip" title="{{reservation.ratecodedesc}}"><span class="arrow">{{ reservation.ratecode }}</span></td>
-		<td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal"><i class="fa fa-address-book-o" aria-hidden="true"></i></button></td>
+		<td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal" style="min-width: 30px"><i class="fa fa-id-card" aria-hidden="true"></i></button></td>
 	</tr>
 </table>
 
-<button ng-click="showSnackTest()">test</button>
+
 <div ng-show="loaded && tester">
 	<div class="row">
 		<div class="col-md-4">
@@ -66,175 +66,7 @@
 <!-- </div>	 -->
 <!--MODALS-->
 <div class="modalBack">
-	<div class="modal-dialog modal-lg modalFullHeight modalBox" role="document" esc-key="testing()">
-		<div class="modal-content">
-			<div class="modal-header modal-header-primary">
-				<div class="row">
-					<div class="col-md-12 padBottom15">
-						<button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close"><span class="white" aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title white" id="myModalLabel">{{ selectedReservation.reservationname }} ({{ selectedReservation.idreservation }}) <span class="toPay">To Pay: £ {{balToPay}}</span></h4>
-
-					</div>
-				</div>
-				<div class="row" id="modalHeaderButtons" style="text-align: center">
-					<div class="col-md-2">
-						<button class="btn modalButton" ng-click="setModal('reservation')">Reservation</button>
-					</div>
-					<div class="col-md-2">
-						<button class="btn modalButton" ng-click="setModal('breakdown')">Breakdown</button>
-					</div>
-					<div class="col-md-2">
-						<button class="btn modalButton" ng-click="setModal('posting')">Posting</button>
-					</div>
-					<div class="col-md-2">
-						<button class="btn modalButton" ng-click="getExtras(); setModal('specials')">Other Charges</button>
-					</div>
-					<div class="col-md-2">
-						<button class="btn modalButton" ng-click="setModal('history')">History</button>
-					</div>
-					<div class="col-md-2 dropdown">
-						<button class="btn modalButton dropdown-toggle" type="button" data-toggle="dropdown">More..
-							<span class="caret"></span></button>
-						<ul class="dropdown-menu">
-							<!-- <li><a href ng-click="cancel(this.selectedReservation.idreservation)" data-dismiss="modal">Cancel..</a></li> -->
-							<li><a href ng-click="cancelQuestion()" data-dismiss="modal">Cancel..</a></li>
-							<li><a href ng-click="setModal('notes')">Notes..</a></li>
-							<li><a href ng-click="setModal('events')">Events..</a></li>
-							<li><a href ng-click="testModal()">Test Modal</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="modal-body-custom" ng-switch="modalContextOpen">
-				<div class="row" ng-switch-when="reservation">
-					<div class="col-md-12">
-						<div class="row">
-							<form name="resForm">
-								<div class="col-md-2">
-									<div class="form-group">
-										<label>Reservation Num:</label>
-										<input type="text" ng-model="selectedReservation.idreservation" name="resId" disabled class="modalInput form-control">
-									</div>
-									<div class="form-group">
-										<label>Surname:</label>
-										<input type="text" ng-model="selectedReservation.surname" name="surname"  class="modalInput form-control">
-									</div>
-									<div class="form-group">
-										<label>Forename</label>
-										<input type="text" ng-model="selectedReservation.forename" name="forename" class="modalInput form-control">
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group" id="whatever">
-										<!-- Date input -->
-										<label class="control-label" for="date">Arriving</label><br>
-										<md-datepicker ng-model="selectedReservation.arrivalDate" id="arrival" name="arrivingDate" class="" ></md-datepicker>
-									</div>
-									<div class="form-group" id="whatever">
-										<!-- Date input -->
-										<label class="control-label" for="date">Departing</label><br>
-										<md-datepicker ng-model="selectedReservation.departureDate" id="arrival" name="arrivingDate" class="" ></md-datepicker>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label>Room Type</label>
-										<select class="form-control" ng-model="selectedReservation.idunittype" ng-options="unit.idunittype as unit.unittypedesc  for unit in unitTypes" style="margin-top:4px">
-										</select>
-									</div>
-									<label>Unit</label>
-									<div class="input-group">
-										<input type="text" ng-model="selectedReservation.unitdescription" name="room" class="modalInput form-control">
-										<span class="input-group-addon">$</span>
-									</div>
-									<div class="form-group">
-										<label>Rate Code</label>
-											<select class="form-control" ng-model="selectedReservation.idratecode" ng-options="ratecode.idratecode as ratecode.ratecodedesc for ratecode in ratecodes" style="margin-top:4px">
-											<option selected value="" disabled>Select a Rate Code</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-2">
-								</div>
-								<div class="col-md-2">
-								</div>
-								<div class="col-md-2">
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="row" ng-switch-when="posting">
-					<div class="col-md-12">
-						<div class="row">
-							<posting-partial></posting-partial>
-						</div>
-					</div>
-				</div>
-				<div class="row" ng-switch-when="breakdown" style="height: 100%">
-					<div class="col-md-12" style="height: 100%">
-						<div class="row" style="height: 100%">
-							<breakdown-partial></breakdown-partial>
-						</div>
-					</div>
-				</div>
-				<div class="row" ng-switch-when="history">
-					<div class="col-md-12">
-						<div class="row">
-							<history-partial></history-partial>
-						</div>
-					</div>
-				</div>
-				<div class="row" ng-switch-when="specials">
-					<extras-form></extras-form>
-				</div>
-				<div class="row" ng-switch-when="notes">
-					<div layout="column" class="md-inline-form">
-						<md-content layout-gt-sm="row" style="background-color: transparent">
-							<md-input-container style="width:100%">
-								<label>Reservation Notes</label>
-								<textarea max-rows="10"></textarea>
-							</md-input-container>
-						</md-content>
-					</div>
-					<div layout="column" class="md-inline-form">
-						<md-content layout-gt-sm="row" style="background-color: transparent">
-							<md-input-container style="width:100%">
-								<label>Check In Notes</label>
-								<textarea max-rows="10"></textarea>
-							</md-input-container>
-						</md-content>
-					</div>
-					<div layout="column" class="md-inline-form">
-						<md-content layout-gt-sm="row" style="background-color: transparent">
-							<md-input-container style="width:100%">
-								<label>Check Out Notes</label>
-								<textarea max-rows="10"></textarea>
-							</md-input-container>
-						</md-content>
-					</div>
-					<div class="pull-right">
-						<button class="btn btn-default">Save Notes</button>
-					</div>
-				</div>
-				<div class="row" ng-switch-when="events">
-					<div class="col-md-12">
-						<div class="row">
-							<span>events</span>
-						</div>
-					</div>
-				</div>
-
-			</div>
-			<div class="modal-footer">
-				<div class="pull-left">
-					<button class="btn modalButton"  ng-click="balanceQuestion()" data-dismiss="modal" ng-disabled="!allocated">Check In</button>
-					<span ng-if="!allocated">You must allocate all rooms prior to check-in.</span>
-				</div>
-				<button type="button" class="btn btn-default btnNegative choiceButtons closeBtn" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
+	<reservation-window-modal></reservation-window-modal>
 
 
 	<div class="messageModal modalBox modal-small" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -280,6 +112,9 @@
 			</div>
 		</div>
 	</div>
+
+	<room-select style="display: none" id="roomSelectModal"></room-select>
+
 
 </div>
 

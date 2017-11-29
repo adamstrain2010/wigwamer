@@ -26,7 +26,7 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 				$scope.inHouseResList = data;
 				$scope.inHouseReservations = [];
                 $scope.inHouseReservations = $scope.inHouseResList.data[0][0];
-                $scope.inHouseReservations.forEach(function(r){r.fromdate = moment(r.fromdate).format("DD/MM/YYYY");r.todate = moment(r.todate).format("DD/MM/YYYY")});
+                $scope.inHouseReservations.forEach(function(r){r.fromdate = moment(r.fromdate).format("DD/MM/YYYY");r.todate = moment(r.todate).format("DD/MM/YYYY"); r.toPay = r.toPay.toFixed(2)});
                 console.log($scope.inHouseReservations);
                 console.log($scope.inHouseResList);
 			})
@@ -121,6 +121,7 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 			case 1:
 				leftClick = true;
                 dates = [];
+                console.log(dates);
                 dates.push(moment($(this).data("date"),"DD/MM/YYYY"));
 				break;
             case 3:
@@ -131,6 +132,7 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
     $(document).on("mouseup", '.dayCell', function(){
 		if(leftClick == true){
             dates.push(moment($(this).data("date"),"DD/MM/YYYY"));
+            console.log(dates);
             showDates();
 		}
 		else{
@@ -139,6 +141,7 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 	});
 
 	function showDates(){
+		console.log("functioning");
 		var startDate = null;
 		var endDate = null;
         $rootScope.startDate = null;
@@ -157,6 +160,11 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 		else{
 			console.log("no");
 		}
+	}
+
+	$scope.testrt = function(){
+		console.log(dates);
+		console.log($rootScope);
 	}
 
 	$scope.changeFromDate = function(){

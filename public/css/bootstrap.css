@@ -1045,7 +1045,7 @@ html {
 }
 body {
   font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.846;
   color: #666666;
   background-color: #ffffff;
@@ -2726,6 +2726,7 @@ label, .has-warning.checkbox label, .has-warning.radio-inline label, .has-warnin
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  min-width: 110px;
 }
 .btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
   outline: 5px auto -webkit-focus-ring-color;
@@ -6306,9 +6307,6 @@ button.close {
   border: none;
   -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-  -webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  transition: all 0.4s;
 }
 .btn-link {
   border-radius: 3px;

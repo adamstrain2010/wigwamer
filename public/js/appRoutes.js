@@ -44,8 +44,8 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 			controller: 'AvailabilityController'	
 		})
 
-		.when('/reservations/reservations_made', {
-			templateUrl: 'views/reservations/reservations_made.html',
+		.when('/reservations/reservationsMade', {
+			templateUrl: 'views/reservations/newreservationsmade.html',
 			controller: 'NewReservationsMadeController'
 		})
 
@@ -60,14 +60,19 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		})
 
 		.when('/test',{
-			templateUrl: 'views/roomSelectTest.html',
-			controller: 'roomSelect'
+			templateUrl: 'views/test/test.html',
+			controller: 'testController'
 		})
 
 		.when('/rollDay',{
 			templateUrl: 'views/rollDay.html',
 			controller: 'RollDayController'
 		})
+
+        .when('/reservations/viewreservations',{
+            templateUrl: 'views/reservations/viewReservations.html',
+            controller: 'ViewReservationsController'
+        })
 
 		.otherwise({
 			redirectTo: '/'

@@ -1,30 +1,52 @@
-<table class="table table-striped table-bordered">
+<div class="text-center" ng-show="!loaded">
+	<i class="fa fa-circle-o-notch fa-spin loader" aria-hidden="true"></i>
+</div>
+<table class="table table-striped table-bordered" ng-show="loaded">
 	<thead>
 		<tr>
-			<th><a href="#" class="noFingerLink">Room</a></th>
-			<th><a href="#" class="noFingerLink">Status</a></th>
+			<th colspan="4" class="orangeWhite">Status</th>
+			<th colspan="4" class="orangeWhite">In House</th>
+			<th colspan="4" class="orangeWhite">Arriving</th>
+			<th style="background-color: orange; border-top: none; border-right: none"></th>
+		</tr>
+		<tr>
+			<th><a href="#" class="noFingerLink">Unit</a></th>
+			<th><a href="#" class="noFingerLink">Unit Type</a></th>
 			<th><a href="#" class="noFingerLink">HK Status</a></th>
-			<th><a href="#" class="noFingerLink">Occupant Name</a></th>
-			<th><a href="#" class="noFingerLink">Res#</a></th>
-			<th><a href="#" class="noFingerLink">Options</a></th>
+			<th style="border-right-color: orange"><a href="#" class="noFingerLink">Unit Status</a></th>
+			<th><a href="#" class="noFingerLink">Booking Number</a></th>
+			<th><a href="#" class="noFingerLink">Name</a></th>
+			<th><a href="#" class="noFingerLink">Arriving</a></th>
+			<th style="border-right-color: orange"><a href="#" class="noFingerLink">Departing</a></th>
+			<th><a href="#" class="noFingerLink">Booking Number</a></th>
+			<th><a href="#" class="noFingerLink">Name</a></th>
+			<th><a href="#" class="noFingerLink">Arriving</a></th>
+			<th style="border-right-color: orange"><a href="#" class="noFingerLink">Departing</a></th>
+			<th><a href="#" class="noFingerLink">Actions</a></th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td>101</td>
-			<td style="color: lime; font-style: italic; font-weight: bold">Vacant</td>
-			<td>To be Serviced</td>
-			<td style="color: lime; font-style: italic; font-weight: bold">Clean Me</td>
-			<td></td>
-			<td><button class="info btn btn-warning" ng-click="setHKStatus(1)"><i class="fa fa-flag" aria-hidden="true"></i></button></td>
-		</tr>
-		<tr>
-			<td>102</td>
-			<td style="color: lime; font-style: italic; font-weight: bold">Vacant</td>
-			<td>To be Serviced</td>
-			<td style="color: lime; font-style: italic; font-weight: bold">Clean Me</td>
-			<td></td>
-			<td><button class="info btn btn-warning"><i class="fa fa-flag" aria-hidden="true"></i></button></td>
+		<tr ng-repeat="unit in units">
+			<td>{{unit.unitnumber}}</td>
+			<td>{{unit.unittypedesc}}</td>
+			<td>{{unit.hskstatusdesc}}</td>
+			<td style="border-right-color: orange">{{unit.unitstatusdesc}}</td>
+			<td>{{unit.idreservation}}</td>
+			<td>{{unit.reservationname}}</td>
+			<td>{{unit.fromdate}}</td>
+			<td style="border-right-color: orange">{{unit.todate}}</td>
+			<td>{{unit.residreservation}}</td>
+			<td>{{unit.resreservationname}}</td>
+			<td>{{unit.resfromdate}}</td>
+			<td style="border-right-color: orange">{{unit.restodate}}</td>
+			<td>
+				<div style="float: left; width: 50%; text-align: right; padding-right: 5px"><button data-toggle="tooltip" title="View reservation" class="btn btn-warning" style="min-width: 30px" ng-disabled="unit.idreservation == null"><i class="fa fa-id-card" aria-hidden="true"></i></button></div>
+				<div style="float: left; width: 50%; text-align: left; padding-left: 5px "><button data-toggle="tooltip" title="Update housekeeping status" class="btn btn-default" style="min-width: 30px" ng-click="openHKSelectModal(this)">UD</button></div>
+			</td>
 		</tr>
 	</tbody>
 </table>
+
+<div class="modalBack">
+	<hk-select-modal></hk-select-modal>
+</div>

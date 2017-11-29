@@ -1,0 +1,91 @@
+<div class="row" style="display: flex; flex-wrap: wrap">
+    <div class="col-md-2" style="display: flex;flex-direction: column;">
+        <div class="form-group" id="whatever">
+            <label>Arriving</label>
+            <md-date-range
+                    ng-model="arriveModel"
+                    auto-confirm="false"
+                    show-template="false"
+                    one-panel="true"
+                    custom-templates="mdCustomTemplates"
+                    selected-template-name="selectedRange.selectedTemplateName"
+                    selected-template="selectedRange.selectedTemplate"
+                    md-on-select="onArrivalSelect()"
+            >
+            </md-date-range>
+        </div>
+    </div>
+
+    <div class="col-md-2" style="display: flex;flex-direction: column;">
+        <div class="form-group" id="whatever">
+            <label>Departing</label>
+            <md-date-range
+                    ng-model="departModel"
+                    auto-confirm="false"
+                    show-template="false"
+                    one-panel="true"
+                    custom-templates="mdCustomTemplates"
+                    md-on-select="onDepartureSelect()">
+            </md-date-range>
+        </div>
+    </div>
+    <div class="col-md-1" style="margin-top: auto">
+        <div class="form-group">
+            <button class="btn btn-warning" ng-click="showFilters()">Filters</button>
+        </div>
+    </div>
+    <div class="col-md-1" style="margin-top: auto">
+        <div class="form-group">
+            <button class="btn btn-default" ng-click="clearAllFilters()">Clear Filters</button>
+        </div>
+    </div>
+    <div class="col-md-1" style="margin-top: auto; margin-left: 8px">
+        <div class="form-group">
+            <button class="btn btn-default" ng-click="clearAllFilters()">Clear All</button>
+        </div>
+    </div>
+    <div class="col-md-5">
+            <button ng-click="getReservationsFull()" style="display: none;">Test</button>
+    </div>
+</div>
+<div class="text-center" ng-show="!loaded">
+    <i class="fa fa-circle-o-notch fa-spin loader" aria-hidden="true"></i>
+</div>
+<table class="table table-striped table-bordered" ng-show="loaded">
+    <tr>
+        <th><a href="#"><a href="#">Reservation #</a></th>
+        <th><a href="#"><a href="#">Reservation Name</a></th>
+        <th><a href="#"><a href="#">Status</a></th>
+        <th><a href="#">Arrival Date</a></th>
+        <th><a href="#">Departure Date</a></th>
+        <th><a href="#">Unit Type</a></th>
+        <th><a href="#">Unit</a></th>
+        <th><a href="#">Confirmation #</a></th>
+        <th><a href="#">Booking Source</a></th>
+        <th><a href="#">To Pay</a></th>
+        <th><a href="#">Rate Code</a></th>
+        <th>Actions</th>
+    </tr>
+    <tbody>
+    <tr ng-repeat="res in reservations">
+        <td>{{res.idreservation}}</td>
+        <td>{{res.reservationname}}</td>
+        <td>{{res.reservationstatusdescription}}</td>
+        <td>{{res.fromdate}}</td>
+        <td>{{res.todate}}</td>
+        <td>{{res.unittypedesc}}</td>
+        <td>{{res.unitnumber}}</td>
+        <td>HWL-1234567</td>
+        <td><span data-toggle="tooltip" title="{{res.reservationsourcedescription}}" class="bSource" style="background-color: {{res.reservationcolour}}; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold">{{ res.reservationsourcecode }}</span></td>
+        <td>£{{res.toPay}}</td>
+        <td>{{res.ratecodedesc}}</td>
+        <td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal" style="min-width: 30px"><i class="fa fa-address-book-o" aria-hidden="true"></i></button></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="modalBack">
+    <!--<reservation-list-modal></reservation-list-modal>-->
+    <reservation-window-modal style="display: none" id="resWinModal" class="modalBoxes"></reservation-window-modal>
+    <view-filter-modal style="display: none" id="viewFilterModal" class="modalBoxes"></view-filter-modal>
+</div>

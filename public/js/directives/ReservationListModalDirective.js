@@ -47,25 +47,31 @@ app.directive("reservationListModal", function(dashboard, $rootScope){
         '<div ng-show="status.length == 0"><h4 style="text-align: center">No Reservations</h4></div>' +
         '<table class="table table-striped table-bordered" ng-show="status.length > 0">' +
         '<thead>' +
-        '<th><a class="noFingerLink" href="#">Status</a></th>' +
         '<th><a class="noFingerLink" href="#">Reservation #</a></th>' +
         '<th><a class="noFingerLink" href="#">Reservation Name</a></th>' +
+        '<th><a class="noFingerLink" href="#">Status</a></th>' +
         '<th><a class="noFingerLink" href="#">Arrival Date</a></th>' +
         '<th><a class="noFingerLink" href="#">Departure Date</a></th>' +
         '<th><a class="noFingerLink" href="#">Unit Type</a></th>' +
+        '<th><a class="noFingerLink" href="#">Unit</a></th>' +
         '<th><a class="noFingerLink" href="#">Confirmation #</a></th>' +
         '<th><a class="noFingerLink" href="#">Booking Source</a></th>' +
+        '<th><a class="noFingerLink" href="#">To Pay</a></th>' +
+        '<th><a class="noFingerLink" href="#">Actions</a></th>' +
         '</thead>' +
         '<tbody>' +
         '<tr dir-paginate="inHouseReservation in inHouseReservations | itemsPerPage: 15 | filter:{idreservationstatus:resStatusContext.type} as status">' +
-        '<td>{{inHouseReservation.reservationstatusdescription}}</td>' +
         '<td>{{inHouseReservation.idreservation}}</td>' +
         '<td>{{inHouseReservation.reservationname}}</td>' +
+        '<td>{{inHouseReservation.reservationstatusdescription}}</td>' +
         '<td>{{inHouseReservation.fromdate}}</td>' +
         '<td>{{inHouseReservation.todate}}</td>' +
         '<td>{{inHouseReservation.unittypedesc}}</td>' +
+        '<td>{{inHouseReservation.unitnumber}}</td>' +
         '<td>{{inHouseReservation.reservationsourcecode}}-1234567</td>' +
         '<td><span data-toggle="tooltip" title="{{inHouseReservation.reservationsourcedescription}}" class="bSource ng-binding" style="background-color: {{inHouseReservation.reservationcolour}}; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold">{{inHouseReservation.reservationsourcecode}}</span></td>' +
+        '<td>£{{inHouseReservation.toPay}}</td>' +
+        '<td><button class="info btn btn-warning" ng-click="setCurrentReservation(this)"  data-toggle="modal" data-target="#myModal" style="min-width: 30px"><i class="fa fa-address-book-o" aria-hidden="true"></i></button></td>' +
         '</tr>' +
         '</tbody>' +
         '</table>' +
@@ -86,7 +92,7 @@ app.directive("reservationListModal", function(dashboard, $rootScope){
                 scope.inHouseReservations = [];
                 scope.inHouseReservations = scope.inHouseResList.data[0][0];
                 console.log(scope.inHouseReservations);
-                scope.inHouseReservations.forEach(function(r){r.fromdate = moment(r.fromdate).format("DD/MM/YYYY");r.todate = moment(r.todate).format("DD/MM/YYYY"); console.log(r)});
+                scope.inHouseReservations.forEach(function(r){r.fromdate = moment(r.fromdate).format("DD/MM/YYYY");r.todate = moment(r.todate).format("DD/MM/YYYY"); r.toPay = r.toPay.toFixed(2)});
             }
             $(".closeBtn").click(function(){
                 $(".modalBack").css("display", "none");

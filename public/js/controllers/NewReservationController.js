@@ -131,6 +131,9 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 			});
 		}
 		if($scope.roomsToSave[0] == null){
+			console.log("2nd");
+			console.log($scope.selectedUnitType)
+			$scope.nationality.idcountry = $scope.nationality.idcountry == null ? -2 : $scope.nationality.idcountry;
             dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry,$scope.selectedUnitType.idunittype, null,1)
                 .then(function(result){
                     $scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
@@ -143,7 +146,7 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
                 });
 		}
 		else{
-			console.log("2nd");
+			console.log("3rd");
 			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry,$scope.selectedUnitType.idunittype, $scope.roomsToSave[0],1)
 			.then(function(result){
 				$scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};

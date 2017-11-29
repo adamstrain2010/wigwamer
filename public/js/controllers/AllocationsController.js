@@ -35,6 +35,7 @@ app.controller("AllocationsController", function($scope, $rootScope, appService,
         else{
             $scope.allocatedFilter = undefined;
         }
+        $scope.updateReservations(moment($scope.arrivalDate).format("YYYY-MM-DD")); 
     }
 
 
@@ -59,27 +60,13 @@ app.controller("AllocationsController", function($scope, $rootScope, appService,
                 }
 	        }
         }
-        for(var i3 = 0; i3 < reservationsToAllocate.length; i3++){
-	        var counter = i3;
-	        // console.log(i3);
-	        // console.log(reservationsToAllocate[i3]);
-            var thisReservationId = reservationsToAllocate[i3].idreservation;
-            console.log(thisReservationId);
-            var thisUrl = "http://52.19.183.139:1234/api/getConcurrentRooms?fromDate=" + moment(reservationsToAllocate[i3].fromdate, "DD/MM/YYYY").format("YYYY-MM-DD") + "&toDate=" + moment(reservationsToAllocate[i3].todate, "DD/MM/YYYY").format("YYYY-MM-DD")   + "&idUnitType=" + reservationsToAllocate[i3].idunittype;
-	        $.ajax({
-                method: "GET",
-                url: thisUrl})
-                .done(function(result){
-                    console.log("ROOMS AVAILABLE FOR " + thisReservationId);
-                    console.log(result);
-                })
-                .catch(function(err){
-                    console.log(err);
-                })
-
-        }
-        $scope.updateReservations(moment($scope.arrivalDate).format("YYYY-MM-DD"));
-    }
+        var result = reservationsToAllocate.map(a => a.idreservation).toString();
+        console.log(result.toString());
+        appService.autoAllocate(result)
+            .then(function(){
+                $scope.updateReservations(moment($scope.arrivalDate).format("YYYY-MM-DD"));
+            })
+	}
 
 
 
