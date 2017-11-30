@@ -1,4 +1,4 @@
-app.directive("extrasForm",function($compile, dashboard){
+app.directive("extrasForm",function($compile, dashboard, $rootScope){
     return{
         restrict: 'E',
         replace: true,
@@ -45,7 +45,6 @@ app.directive("extrasForm",function($compile, dashboard){
         '    </tbody>\n' +
         '</table>\n' +
         '<div class="pull-right">\n' +
-        '<button class="btn btn-default" ng-click="postExtrasToDB()">post</button>\n' +
         '</div>\n' +
         '</div>\n' +
         '</div>\n' +
@@ -81,9 +80,16 @@ app.directive("extrasForm",function($compile, dashboard){
             scope.numRows = scope.extraChargesToAdd.length;
             scope.addExtraChargeToList = function(){
                 if(scope.chargeType.idextras != null & scope.extrasQuantity != null){
+                    console.log("whoop");
                     var toAdd = {"extraId": scope.chargeType.idextras, "extraDesc": scope.chargeType.extrasdescription ,"extraType": scope.chargeType, "qty": scope.extrasQuantity, "unitPrice": "£" + (5.00).toFixed(2), "subTotal": "£" + (scope.extrasQuantity * 5).toFixed(2)};
-                    scope.extraChargesToAdd.push(toAdd);
-                    scope.numRows = scope.extraChargesToAdd.length;
+                    dashboard.insertExtra(toAdd, reservationId)
+                        .then(function(result){
+                            $rootScope.getBalanceToPay(scope.$parent.selectedReservation.idreservation);
+                            scope.getExtrasForReservation();
+                        })
+                        .catch(function(err){
+                            console.log(err);
+                        });
                     scope.chargeType = "";
                     scope.extrasQuantity = "";
                     extrasSelect.focus();
@@ -91,10 +97,18 @@ app.directive("extrasForm",function($compile, dashboard){
                 else{
                     return;
                 }
+
+
             };
             scope.removeRow  = function(array, index){
-                array.splice(index, 1);
-                scope.numRows = scope.extraChargesToAdd.length;
+                var charge = this.extraCharge;
+                dashboard.deleteExtra(charge.idreservationextras, scope.$parent.thisReservation.reservationNumber)
+                    .then(function(){
+                        $rootScope.getBalanceToPay(scope.$parent.selectedReservation.idreservation);
+                        scope.getExtrasForReservation();
+                    })
+                // array.splice(index, 1);
+                // scope.numRows = scope.extraChargesToAdd.length;
             };
             scope.populateNext = function(){
                 scope.extrasQuantity = 1;

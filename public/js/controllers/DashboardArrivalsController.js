@@ -227,6 +227,10 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
     $scope.contextMenu = {"title":"check in", "function":"console.log(this)"};
 
 
+    $scope.clearSelectedRes = function(){
+
+    }
+
     $scope.checkIn = function(el){
         console.log(el);
         dashboard.checkInSingle(el.idreservation, el.idunit)
@@ -343,6 +347,7 @@ app.controller('DashboardArrivalsController',function($scope,$http,$rootScope,  
     };
 
     $scope.setCurrentReservation = function(reservationNum){
+        $scope.setModal('reservation');
         dashboard.showData(reservationNum.reservation.idreservation)
             .then(function(res){
                 $scope.selectedReservation = res.recordset[0];

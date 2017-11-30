@@ -87,6 +87,11 @@ app.factory("dashboard", function($http){
             '&reservationId=' + idReservation + '&chargeDate=2017-06-01&adultCharge=5.00';
         return $http.post(apiUrl);
     };
+    var deleteextra = function(extraId, resId){
+        var apiUrl = 'http://52.19.183.139:1234/api/deleteExtra?extraId=' + extraId + '&resId=' + resId;
+        console.log(apiUrl);
+        return $http.post(apiUrl);
+    };
     var getreservationextras = function(idReservation){
         var apiUrl = 'http://52.19.183.139:1234/api/getReservationExtras?idReservation=' + idReservation;
         return $http.get(apiUrl);
@@ -170,6 +175,7 @@ app.factory("dashboard", function($http){
         getRoomsFromRoomType: getroomsbasedonroomtype,
         getAllSpecials: getallspecials,
         insertExtra: insertextra,
+        deleteExtra: deleteextra,
         getReservationExtras: getreservationextras,
         getChargeBreakdown: getcharges,
         getTransactions: gettransactions,

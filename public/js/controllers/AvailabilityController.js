@@ -134,6 +134,7 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
             dates.push(moment($(this).data("date"),"DD/MM/YYYY"));
             console.log(dates);
             showDates();
+            leftClick = false;
 		}
 		else{
 			return;
@@ -151,6 +152,7 @@ app.controller("AvailabilityController", function($scope, $rootScope, $location,
 		$rootScope.startDate = startDate;
 		$rootScope.endDate = endDate;
 		$rootScope.newResFlag = true;
+		console.log(dates);
 		//confirm("Do you want to make a new reservation " + startDate.format("DD/MM/YYYY") + " - " + endDate.format("DD/MM/YYYY") + "?") ? $location.path('/dashboard/newReservation') : console.log("no");
 		if(confirm("Do you want to make a new reservation " + startDate.format("DD/MM/YYYY") + " - " + endDate.format("DD/MM/YYYY") + "?")){
 			$location.path('/dashboard/newReservation');

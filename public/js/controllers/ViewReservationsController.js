@@ -108,6 +108,7 @@ app.controller("ViewReservationsController", function($scope, $rootScope ,dashbo
     $scope.page = 'calendar';
 
     $scope.onArrivalSelect = function(){
+        $scope.arrivingFrom = null;
         $scope.arriving.from = moment($scope.arriveModel.dateStart);
         $scope.arriving.to = moment($scope.arriveModel.dateEnd);
         $scope.getReservations();
@@ -246,8 +247,8 @@ app.controller("ViewReservationsController", function($scope, $rootScope ,dashbo
 
 $scope.setCurrentReservation = function(reservation){
     $(".modalBoxes").css("display", "none");
-    $("#resWinModal").css("display", "block");
-    $(".modalBack").css("display", "block");
+    // $("#resWinModal").css("display", "block");
+    // $(".modalBack").css("display", "block");
     dashboard.showData(reservation.res.idreservation)
         .then(function(res){
             console.log(res);
@@ -275,12 +276,14 @@ $scope.setCurrentReservation = function(reservation){
             else{
                 $scope.allocated = true;
             }
-            $(".modalFullHeight").css("display", "block");
-            $('.modalBack').css("display", "block");
-            console.log($scope.selectedReservation);
         })
         .then(function(){
-            $scope.getBalanceToPay(reservation.res.idreservation);
+            $scope.getBalanceToPay(reservation.res.idreservation)
+        })
+        .then(function(){
+            $("#resWinModal").css("display", "block");
+            $('.modalBack').css("display", "block");
+            console.log($scope.selectedReservation);
         })
         .catch(function(err){
             console.log(err);
