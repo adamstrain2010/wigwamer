@@ -30,8 +30,8 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
 		})
 
 		.when('/planner', {
-			templateUrl: 'views/planner.html',
-			controller: 'PlannerController'	
+			templateUrl: 'views/test/test.html',
+			controller: 'testController'
 		})
 		
 		.when('/reservations/allocations', {
@@ -73,6 +73,11 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
             templateUrl: 'views/reservations/viewReservations.html',
             controller: 'ViewReservationsController'
         })
+
+		.when('/dragula',{
+			templateUrl: 'views/dragulaTest.html',
+			controller: 'dragulaController'
+		})
 
 		.otherwise({
 			redirectTo: '/'

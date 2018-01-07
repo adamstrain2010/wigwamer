@@ -5,6 +5,7 @@ app.directive("rollDay",function(appService, $rootScope, dashboard,$mdDialog){
         restrict: 'E',
         replace: true,
         template: '<div class="rollBox">' +
+        '<div class="rollInner" ng-show="checking">"' +
         '<h4 style="color: white">End of Day Check List</h4>' +
         '<ul class="noDec">' +
         '<li ng-repeat="stage in stages">' +
@@ -13,13 +14,22 @@ app.directive("rollDay",function(appService, $rootScope, dashboard,$mdDialog){
         '</ul>' +
         '<button class="btn btn-default" ng-show="!checkAllValid && allComplete" ng-click="checkRoll()">Recheck</button>' +
         '<button class="btn btn-default" ng-show="checkAllValid && allComplete" ng-click="rollDay()">Roll Day</button>' +
-        '' +
-
+        '</div>' +
+        '<div class="rollInner" ng-show="!checking">"' +
+        '<h4 style="color: white">Rolling Day</h4>' +
+        '<ul class="noDec">' +
+        '<li ng-repeat="stage in rollingStages">' +
+        '<span class="checkRollItem" ng-class="proven">{{stage.text}}<i class="fa fa-check padding-left-10" aria-hidden="true"></i></span>' +
+        '</li>' +
+        '</ul>' +
+        '<button class="btn btn-default" ng-show="rollComplete" ng-click="changeDay()">OK</button>' +
+        '</div>' +
         '</div>',
         link: function(scope, elem, attrs){
             var dateToRoll;
             scope.checkAllValid = true;
             scope.allComplete = false;
+            scope.checking = true;
             console.log("hello");
             appService.getSystemDate()
                 .then(function(result){
@@ -42,6 +52,13 @@ app.directive("rollDay",function(appService, $rootScope, dashboard,$mdDialog){
 
             scope.stages = [scope.arrivals, scope.departures, scope.changes, scope.shifts];
 
+
+            scope.accommodation = {"text": "Accommodation Posted","complete": false};
+
+            scope.rollingStages = [scope.accommodation];
+
+            scope.rollComplete = true;
+
             scope.rollDay = function(){
                 scope.checkOutQuestion();
             }
@@ -58,21 +75,23 @@ app.directive("rollDay",function(appService, $rootScope, dashboard,$mdDialog){
                 $(".modalBack").css("display", "none");
                 $mdDialog.show(confirm).then(function() {
                     appService.rollDay();
-                    var alert = $mdDialog.alert(ev)
-                        .title('Day Roll Complete')
-                        .textContent('The day has been successfully rolled. You will now be redirected to the login screen.')
-                        .ariaLabel('The day has been successfully rolled. You will now be redirected to the login screen.')
-                        .targetEvent(ev)
-                        .ok('OK')
-
-                    $mdDialog.show(alert)
-                        .then(function(){
-                            window.location.href = "/";
-                        })
-
+                    scope.checking = false;
                 }, function() {
                     $(".modalBack").css("display", "block");
                 });
+            }
+
+            scope.changeDay = function(){
+                var alert = $mdDialog.alert()
+                    .title('Day Roll Complete')
+                    .textContent('The day has been successfully rolled. You will now be redirected to the login screen.')
+                    .ariaLabel('The day has been successfully rolled. You will now be redirected to the login screen.')
+                    .ok('OK')
+
+                $mdDialog.show(alert)
+                    .then(function(){
+                        window.location.href = "/";
+                    })
             }
 
             scope.checkRoll = function(){

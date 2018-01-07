@@ -1,0 +1,55 @@
+{
+  "_from": "angular-dragdrop",
+  "_id": "angular-dragdrop@1.0.13",
+  "_inBundle": false,
+  "_integrity": "sha1-4OJAxzzZPKF6182PbnAUgDGdAdw=",
+  "_location": "/angular-dragdrop",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "angular-dragdrop",
+    "name": "angular-dragdrop",
+    "escapedName": "angular-dragdrop",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-dragdrop/-/angular-dragdrop-1.0.13.tgz",
+  "_shasum": "e0e240c73cd93ca17ad7cd8f6e701480319d01dc",
+  "_spec": "angular-dragdrop",
+  "_where": "/home/ec2-user/apps/wigwamer",
+  "author": {
+    "name": "https://github.com/codef0rmer/angular-dragdrop/contributors"
+  },
+  "bugs": {
+    "url": "https://github.com/codef0rmer/angular-dragdrop/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "This directive allows you to use jQuery UI's draggable and droppable plugins with AngularJS.",
+  "devDependencies": {
+    "jasmine-core": "^2.2.0",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-jasmine": "^0.3.5"
+  },
+  "homepage": "http://codef0rmer.github.io/angular-dragdrop",
+  "license": "MIT",
+  "main": "src/angular-dragdrop.js",
+  "name": "angular-dragdrop",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/codef0rmer/angular-dragdrop.git"
+  },
+  "scripts": {
+    "test": "npm run test-unit",
+    "test-unit": "karma start karma.conf.js"
+  },
+  "version": "1.0.13"
+}

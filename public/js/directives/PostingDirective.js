@@ -35,9 +35,15 @@ app.directive("postingPartial", function($rootScope,dashboard){
         '\t\t\t\t<tr ng-repeat="transaction in transactions | filter:(!showVoids || undefined) && showVoids" ng-class="{\'voidedTrans\':transaction.void}">\n' +
         '\t\t\t\t\t<td>{{transaction.datetransaction}}</td>\n' +
         '\t\t\t\t\t<td>{{transaction.transactiondescription}}</td>\n' +
-        '\t\t\t\t\t<td>{{transaction.valuetransaction}}</td>\n' +
+        '\t\t\t\t\t<td>£{{transaction.valuetransaction}}</td>\n' +
         '\t\t\t\t\t<td><i class="fa fa-times" aria-hidden="true" style="color: #FF9800" ng-click="voidTrans(transaction.idtransaction)" role="button" tabindex="0"></i></td>\n' +
         '\t\t\t\t</tr>\n' +
+        '<tr style="font-weight: bold">' +
+        '<td></td>' +
+        '<td>Total:</td>' +
+        '<td>£{{total}}</td>' +
+        '<td></td>' +
+        '</tr>' +
         '\t\t\t</tbody>\n' +
         '\t\t</table>\n' +
         '\t</div>\n' +
@@ -68,6 +74,10 @@ app.directive("postingPartial", function($rootScope,dashboard){
                         scope.loadPostings();
                     })
                     .then(function(){
+                        console.log("yep");
+                        scope.getTotal();
+                    })
+                    .then(function(){
                         scope.loaded = true;
                     })
                     .then(function(){
@@ -93,14 +103,27 @@ app.directive("postingPartial", function($rootScope,dashboard){
                     });
             }
 
+            scope.getTotal = function(){
+                scope.total = 0;
+                for(var i = 0; i < scope.transactions.length; i++){
+                    console.log(scope.transactions[i].valuetransaction);
+                    scope.total += scope.transactions[i].valuetransaction;
+                }
+                scope.transactions.forEach(function(r){r.valuetransaction = r.valuetransaction.toFixed(2)})
+                scope.total = scope.total.toFixed(2);
+            }
+
             scope.loadPostings = function(){
                 dashboard.getPostings(scope.$parent.selectedReservation.idreservation)
                     .then(function(result){
                         console.log(result.data.recordset);
                         scope.transactions = result.data.recordset;
-                        scope.transactions.forEach(function(r){ r.datetransaction = moment(r.datetransaction).format("DD/MM/YY"), r.valuetransaction = "£" + r.valuetransaction.toFixed(2)});
+                        scope.transactions.forEach(function(r){ r.datetransaction = moment(r.datetransaction).format("DD/MM/YY"), r.valuetransaction = r.valuetransaction});
                         scope.numPostings = scope.transactions.length;
                         scope.loaded = true;
+                    })
+                    .then(function(){
+                        scope.getTotal();
                     })
                     .then(function(){
                         scope.getTransactionCodes();
@@ -146,8 +169,7 @@ app.directive("postingPartial", function($rootScope,dashboard){
 
 
             scope.postTransaction = function(){
-                console.log(this);
-                console.log(scope.$parent.selectedReservation.idreservation);
+                console.log($rootScope);
                 var valToPost = 0;
                 if(scope.selectedTransCode.negative == "Y"){
                     valToPost = this.postingValue * -1;
@@ -155,8 +177,7 @@ app.directive("postingPartial", function($rootScope,dashboard){
                 else if(scope.selectedTransCode.negative == "N"){
                     valToPost = this.postingValue;
                 }
-                console.log(this.selectedTransCode.idtransaction);
-                dashboard.insertPosting(scope.$parent.selectedReservation.idreservation, this.selectedTransCode.idtransactioncode, valToPost.toFixed(2), 0)
+                dashboard.insertPosting(scope.$parent.selectedReservation.idclient[0],scope.$parent.selectedReservation.idproperty, scope.$parent.selectedReservation.idreservation, this.selectedTransCode.idtransactioncode, valToPost.toFixed(2), 0, $rootScope.globalSystemDate.format("YYYY-MM-DD"))
                     .then(function(){
                         scope.loadPostings();
                     })

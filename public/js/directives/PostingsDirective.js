@@ -34,10 +34,17 @@ app.directive("postingPartial", function($rootScope,dashboard){
         '\t\t\t<tbody>\n' +
         '\t\t\t\t<tr ng-repeat="transaction in transactions | filter:(!showVoids || undefined) && showVoids" ng-class="{\'voidedTrans\':transaction.void}">\n' +
         '\t\t\t\t\t<td>{{transaction.datetransaction}}</td>\n' +
+        '\t\t\t\t\t<td>{{transaction.datetransaction}}</td>\n' +
         '\t\t\t\t\t<td>{{transaction.transactiondescription}}</td>\n' +
         '\t\t\t\t\t<td>{{transaction.valuetransaction}}</td>\n' +
         '\t\t\t\t\t<td><i class="fa fa-times" aria-hidden="true" style="color: #FF9800" ng-click="voidTrans(transaction.idtransaction)" role="button" tabindex="0"></i></td>\n' +
         '\t\t\t\t</tr>\n' +
+        '<tr>' +
+        '<td></td>' +
+        '<td></td>' +
+        '<td>Total:</td>' +
+        '<td{{total}}></td>' +
+        '</tr>' +
         '\t\t\t</tbody>\n' +
         '\t\t</table>\n' +
         '\t</div>\n' +
@@ -71,6 +78,7 @@ app.directive("postingPartial", function($rootScope,dashboard){
                         scope.loaded = true;
                     })
                     .then(function(){
+                        scope.getTotal();
                         scope.getTransactionCodes();
                     })
                     .catch(function(err){
@@ -78,7 +86,12 @@ app.directive("postingPartial", function($rootScope,dashboard){
                     });
             };
 
-
+            scope.getTotal = function(){
+                scope.total = 0;
+                for(var i = 0; i < scope.transactions.valuetransaction; i++){
+                    scope.total += scope.transactions.valuetransaction[i];
+                }
+            }
 
             //scope.getTransactions();
 

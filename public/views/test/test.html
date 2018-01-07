@@ -1,3 +1,80 @@
-<div class="modalBack" style="display: block">
-    <test-directive></test-directive>
+<!--<div style="width: 150px; height: 30px; border: thin solid black; float: left"></div>-->
+    <!--<div ng-repeat="date in availDate[0]" style="width: 150px; height: 30px; border: thin solid black; float: left">-->
+        <!--{{date.date}}-->
+    <!--</div>-->
+<!--<div ng-repeat="room in availDate" class="room" style="clear: left" ng-class-odd="'everyOther'">-->
+    <!--<div style="width: 150px; height: 60px; border: thin solid gray; float: left">{{room[0].num}}</div>-->
+    <!--<div  ng-repeat="date in room" ng-model="test1" data-drop="true" jqyoui-droppable="{index: {{$index}},onOver: 'overCallback', onDrop: 'dropCallback'}" style="width: 150px; height: 60px; border: thin solid rgba(0,0,0,0.2); float: left">-->
+        <!--<div ng-if="date.arriving" data-drag="true" jqyoui-draggable="{index: {{$index}}}" style="width:{{(date.nights * 150) - 2}}px; border: 1px solid black; height: 58px; background-color: orange;position: relative; color: white; border-radius: 3px" class="reservationDragBox">-->
+            <!--<div style="width: 100%; height: 27px; padding-left: 5px;" ng-click="testing()">{{date.resName}}</div>-->
+            <!--<div style="background-color: white; width: 100%; height: 27px; color: orange; padding-left: 5px;">{{date.reservationId}}</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--<button ng-click="showScope()">Test</button>-->
+
+<!--<div class="row">-->
+    <!--<div class="col-md-12">-->
+        <!--<table style="border: thin solid black; margin-top: 20px">-->
+            <!--<tr>-->
+                <!--<th style="border: thin solid black; width: 50px">#</th>-->
+                <!--<th style="border: thin solid black; width: 150px">Name</th>-->
+                <!--<th style="border: thin solid black; width: 150px">Arriving</th>-->
+                <!--<th style="border: thin solid black; width: 150px">Departing</th>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td style="border: thin solid black">{{selectedRes.reservationId}}</td>-->
+                <!--<td style="border: thin solid black">{{selectedRes.resName}}</td>-->
+                <!--<td style="border: thin solid black">{{selectedRes.arrivalDate}}</td>-->
+                <!--<td style="border: thin solid black">{{selectedRes.departureDate}}</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</div>-->
+<!--</div>-->
+
+
+<!--<div class="reservationDragBox">-->
+    <!--adam-->
+<!--</div>-->
+
+
+<div style="width: 150px; height: 30px; border: thin solid black; float: left"></div>
+<div ng-repeat="date in availDate[0]" style="width: 150px; height: 30px; border: thin solid black; float: left" class="headerContainer">
+    <span class="dateHeader">{{date.date}}</span>
+</div>
+<div ng-repeat="room in availDate" class="room" style="clear: left" ng-class-odd="'everyOther'">
+    <div style="width: 150px; height: 60px; border: thin solid gray; float: left">{{room[0].num}}</div>
+    <div ng-repeat="date in room" class="dropper"  ng-attr-droppable="{{!date.blocked || undefined }}" style="width: 150px; height: 60px; border: thin solid rgba(0,0,0,0.2); float: left">
+        <div ng-if="date.arriving"  ng-draggable="{snap: '.dropper', snapMode: 'inner', snapTolerance: 75, revert: 'invalid'}" style="width:{{(date.nights * 150) - 2}}px; border: 1px solid black; height: 58px; background-color: orange; color: white; border-radius: 3px; position: relative" class="reservationDragBox ui-widget-content">
+            <div style="width: 100%; height: 27px; padding-left: 5px;" ng-click="testing()">{{date.resName}}</div>
+            <div style="background-color: white; width: 100%; height: 27px; color: orange; padding-left: 5px;">{{date.reservationId}}</div>
+        </div>
+    </div>
+</div>
+
+<button ng-click="showScope()">Test</button>
+
+<div class="row">
+    <div class="col-md-12">
+        <table style="border: thin solid black; margin-top: 20px">
+            <tr>
+                <th style="border: thin solid black; width: 50px">#</th>
+                <th style="border: thin solid black; width: 150px">Name</th>
+                <th style="border: thin solid black; width: 150px">Arriving</th>
+                <th style="border: thin solid black; width: 150px">Departing</th>
+            </tr>
+            <tr>
+                <td style="border: thin solid black">{{selectedRes.reservationId}}</td>
+                <td style="border: thin solid black">{{selectedRes.resName}}</td>
+                <td style="border: thin solid black">{{selectedRes.arrivalDate}}</td>
+                <td style="border: thin solid black">{{selectedRes.departureDate}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<div class="reservationDragBox">
+    adam
 </div>

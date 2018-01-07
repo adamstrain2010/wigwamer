@@ -544,3 +544,19 @@ md-dialog md-dialog-actions button {
 	background-color: orange;
 	color: white;
 }
+
+.everyOther>div{
+	background-color: rgba(0,0,0,0.05);
+}
+
+.hovered{
+	background-color: rgba(0,0,0,0.4);
+}
+
+.red{
+	color: red;
+}
+
+.blue{
+	color: blue;
+}

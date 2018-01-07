@@ -87,7 +87,8 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<label>Rooms</label>
+							<label>Rooms</label><br>
+							<label style="font-size: 16px">Selected: <span ng-show="!rooms[0].number">NA</span><span>{{rooms[0].number}}</span></label>
 							<button class="form-control btn btnDark" ng-click="showRoomSelectModal(selectedUnitType.idunittype)">Select</button>
 						</div>
 						<div class="expander" ng-show="expanded">
@@ -151,7 +152,7 @@
 </form>
 <div class="row">
 	<div class="col-md-1">
-		<button class="btn btn-default choiceButtons" ng-click="checkAvailByRange()">Test</button>
+		<button class="btn btn-default choiceButtons" ng-click="printScope()">Test</button>
 	</div>
 	<div class="col-md-9">
 	</div>

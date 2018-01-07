@@ -82,9 +82,10 @@ app.factory("dashboard", function($http){
         console.log($http.get(apiUrl));
         return $http.get(apiUrl);
     };
-    var insertextra = function(extra, idReservation){
+    var insertextra = function(extra, idReservation, chargeDate){
         var apiUrl = 'http://52.19.183.139:1234/api/insertExtra?clientId=' + 1 + '&propertyId=1&extraId=' + extra.extraId +
-            '&reservationId=' + idReservation + '&chargeDate=2017-06-01&adultCharge=5.00';
+            '&reservationId=' + idReservation + '&chargeDate=' + chargeDate + '&adultCharge=5.00';
+        console.log(apiUrl);
         return $http.post(apiUrl);
     };
     var deleteextra = function(extraId, resId){
@@ -114,8 +115,8 @@ app.factory("dashboard", function($http){
         console.log(apiUrl);
         return $http.get(apiUrl);
     };
-    var insertposting = function(idReservation, idTransCode, transValue, transTaxValue){
-        var apiUrl = "http://52.19.183.139:1234/api/insertPosting?reservationId=" + idReservation + "&transcodeId=" + idTransCode + "&value=" + transValue + "&tax=" + transTaxValue;
+    var insertposting = function(idClient, idProperty, idReservation, idTransCode, transValue, transTaxValue, sysDate){
+        var apiUrl = "http://52.19.183.139:1234/api/insertPosting?idClient=" + idClient + "&idProperty=" + idProperty +  "&reservationId=" + idReservation + "&transcodeId=" + idTransCode + "&value=" + transValue + "&tax=" + transTaxValue + "&sysDate=" + sysDate;
         console.log(apiUrl);
         return $http.get(apiUrl);
     };
@@ -158,6 +159,15 @@ app.factory("dashboard", function($http){
         var apiUrl = "http://52.19.183.139:1234/api/updateRes?resId=" + reservationNumber + "&forename=" + forename + "&arriving=" + arriving + "&departing=" + departing + "&unitTypeId=" + unitTypeId + "&unitId=" + unitId + "&rateCodeId=" + rateCodeId;
         console.log(apiUrl);
         return $http.post(apiUrl);
+    };
+    var getbreakdown = function(resId){
+        var apiUrl = "http://52.19.183.139:1234/api/getBreakdown?resId=" + resId;
+        console.log(apiUrl);
+        return $http.get(apiUrl);
+    };
+    var getplannerdata = function(fromDate, toDate){
+        var apiUrl = "http://52.19.183.139:1234/api/getPlannerData?fromDate=" + fromDate + "&toDate=" + toDate;
+        return $http.get(apiUrl);
     }
     return{
         getReservationsDeparting: getReservationsByDepartDate,
@@ -191,7 +201,9 @@ app.factory("dashboard", function($http){
         getDetailedAvailability: getdetailedavailability,
         getAllReservations: getallreservations,
         updateRes: updateres,
-        getReservationsFull: getreservationsfull
+        getReservationsFull: getreservationsfull,
+        getBreakDown: getbreakdown,
+        getPlannerData: getplannerdata
     }
 });
 

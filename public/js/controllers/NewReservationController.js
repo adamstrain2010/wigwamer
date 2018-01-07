@@ -1,6 +1,6 @@
 var element;
 
-app.controller("NewReservationController", function($scope,$rootScope, $http, dashboard, $location,appService, availability){
+app.controller("NewReservationController", function($scope,$rootScope, $http, dashboard, $location,appService, availability, logger){
 	appService.getSystemDate()
 	.then(function(result){
 		$rootScope.globalSystemDate = moment(result.data.recordset[0].systemdate).format("Do MMMM YYYY");
@@ -120,11 +120,15 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
             console.log("1st");
 			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, 900, element, $scope.roomsToSave[0],1)
 			.then(function(result){
+                $scope.saveResId = result.data.outReservationId;
+                logger.logChange(1,1,$scope.saveResId, "Reservation Made", "", '2017-01-01',1, '2017-01-01')
+                    .then(function(result){
+                        console.log("first one:");
+                        console.log(result);
+                    })
+			})
+			.then(function(){
                 $scope.goToArrivals();
-				// $scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
-				// $(".messageModal").css("display", "block");
-				// $(".modalBack").css("display","block");
-				// $("#modalButton").focus();
 			})
 			.catch(function(err){
 				console.log(err);
@@ -136,11 +140,15 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 			$scope.nationality.idcountry = $scope.nationality.idcountry == null ? -2 : $scope.nationality.idcountry;
             dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry,$scope.selectedUnitType.idunittype, null,1)
                 .then(function(result){
+                	$scope.saveResId = result.data.outReservationId;
+                	console.log(result);
                     $scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
                     $(".messageModal").css("display", "block");
                     $(".modalBack").css("display","block");
                     $("#modalButton").focus();
-                })
+                    console.log("second one:");
+                    logger.logChange(1,1,$scope.saveResId, "Reservation Made", "", '2017-01-01',1, '2017-01-01');
+				})
                 .catch(function(err){
                     console.log(err);
                 });
@@ -149,10 +157,14 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 			console.log("3rd");
 			dashboard.createReservation($scope.surname, $scope.forename, fromDate, toDate, $scope.bookingsSource, $scope.nationality.idcountry,$scope.selectedUnitType.idunittype, $scope.roomsToSave[0],1)
 			.then(function(result){
+                $scope.saveResId = result.data.outReservationId;
+				console.log(result);
 				$scope.message = {"title": "Reservation Made", "body": "The reservation was made successfully"};
 				$(".messageModal").css("display", "block");
 				$(".modalBack").css("display","block");
 				$("#modalButton").focus();
+                console.log("third one:");
+				logger.logChange(1,1,$scope.saveResId, "Reservation Made", "", '2017-01-01',1, '2017-01-01');
 			})
 			.catch(function(err){
 				console.log(err);
@@ -160,6 +172,10 @@ app.controller("NewReservationController", function($scope,$rootScope, $http, da
 
 		}
 	};
+
+	$scope.printScope = function(){
+		console.log($scope);
+	}
 
 	$scope.goToArrivals = function(){
         $rootScope.messageToShow = true;

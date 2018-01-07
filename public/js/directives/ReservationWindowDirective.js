@@ -1,6 +1,6 @@
 app.directive('reservationWindowModal', function(){
     return{
-        template: '<div class="modal-dialog modal-lg modalFullHeight modalBox" role="document" esc-key="testing()" id="resModal">\n' +
+        template: '<div class="modal-dialog modal-lg modalFullHeight modalBox" role="document" ng-esc="goTest()" tabindex="0" id="resModal">\n' +
         '\t\t<div class="modal-content">\n' +
         '\t\t\t<div class="modal-header modal-header-primary">\n' +
         '\t\t\t\t<div class="row">\n' +
@@ -171,6 +171,10 @@ app.directive('reservationWindowModal', function(){
 
             scope.clearUnit = function(){
                 console.log(thisReservation.unitDescription);
+            }
+
+            scope.goTest = function(){
+                console.log("Testing");
             }
         }
     }

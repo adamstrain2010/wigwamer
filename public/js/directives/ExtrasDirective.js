@@ -77,12 +77,12 @@ app.directive("extrasForm",function($compile, dashboard, $rootScope){
             }
             scope.loaded = false;
             var reservationId = scope.$parent.selectedReservation.idreservation;
-            scope.numRows = scope.extraChargesToAdd.length;
+            //scope.numRows = scope.extraChargesToAdd.length;
             scope.addExtraChargeToList = function(){
                 if(scope.chargeType.idextras != null & scope.extrasQuantity != null){
                     console.log("whoop");
                     var toAdd = {"extraId": scope.chargeType.idextras, "extraDesc": scope.chargeType.extrasdescription ,"extraType": scope.chargeType, "qty": scope.extrasQuantity, "unitPrice": "£" + (5.00).toFixed(2), "subTotal": "£" + (scope.extrasQuantity * 5).toFixed(2)};
-                    dashboard.insertExtra(toAdd, reservationId)
+                    dashboard.insertExtra(toAdd, reservationId, $rootScope.globalSystemDate.format("YYYY-MM-DD"))
                         .then(function(result){
                             $rootScope.getBalanceToPay(scope.$parent.selectedReservation.idreservation);
                             scope.getExtrasForReservation();
